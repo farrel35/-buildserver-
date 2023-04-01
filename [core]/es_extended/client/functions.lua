@@ -95,6 +95,22 @@ function ESX.HideUI()
     print("[^1ERROR^7] ^5ESX TextUI^7 is Missing!")
 end
 
+function ESX.CreateMenu(menu)
+    if GetResourceState("keep-menu") ~= "missing" then
+        return exports['keep-menu']:createMenu(menu)
+    end
+
+    print("[^1ERROR^7] ^5ESX TextUI^7 is Missing!")
+end
+
+function ESX.ShowUI(msg)
+    return lib.showTextUI(msg)
+end
+
+function ESX.HideUI()
+    return lib.hideTextUI()
+end
+
 function ESX.ShowAdvancedNotification(sender, subject, msg, textureDict, iconType, flash, saveToBrief, hudColorIndex)
     if saveToBrief == nil then
         saveToBrief = true

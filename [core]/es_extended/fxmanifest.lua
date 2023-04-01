@@ -13,6 +13,7 @@ shared_scripts {
 
 	'config.lua',
 	'config.weapons.lua',
+	'@ox_lib/init.lua',
 }
 
 server_scripts {
