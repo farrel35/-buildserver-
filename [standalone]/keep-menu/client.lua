@@ -1,5 +1,5 @@
 local QBCore = nil
-local DevMode = false
+local DevMode = true
 if GetResourceState('qb-core') == 'started' then
     QBCore = exports['qb-core']:GetCoreObject()
 end
