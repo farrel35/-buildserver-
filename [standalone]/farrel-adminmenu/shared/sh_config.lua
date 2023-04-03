@@ -1,7 +1,6 @@
 Config = Config or {}
 Config.Locale = "en"
 Config.FavoritedItems = {}
-Config.PinnedTargets = {}
 Config.AdminOptions = {}
 
 -- Customizable

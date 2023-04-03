@@ -5,20 +5,9 @@ MC.AdminMenu.Sidebar.Selected = "Actions";
 MC.AdminMenu.LoadCategory = function(Category) {
     $('.menu-pages').find(`[data-Page="${MC.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
     if (Category == 'Actions') {
-        MC.AdminMenu.ResetPage('All');
         MC.AdminMenu.LoadItems();
     } else if (Category == 'PlayerList') {
-        MC.AdminMenu.ResetPage('All');
         MC.AdminMenu.LoadPlayerList();
-    } else if (Category == 'RecentBans') {
-        MC.AdminMenu.ResetPage('All');
-        MC.AdminMenu.LoadBanList();
-    } else if (Category == 'PlayerLogs') {
-        MC.AdminMenu.ResetPage('All');
-        MC.AdminMenu.LoadPlayerLogs();
-    } else if (Category == 'Options') {
-        MC.AdminMenu.ResetPage('All');
-        MC.AdminMenu.LoadOptions();
     }
 }
 
@@ -34,12 +23,6 @@ MC.AdminMenu.SidebarAction = function(Action, Element) {
             $.post(`https://${GetParentResourceName()}/Admin/DevMode`, JSON.stringify({
                 Toggle: true,
             }));
-        }
-    } else if (Action == 'PinnedTargets') {
-        if ($('.menu-pinned-players').is(':visible')) {
-            $('.menu-pinned-players').fadeOut(150);
-        } else {
-            $('.menu-pinned-players').fadeIn(150);
         }
     } else if (Action == 'ToggleMenu') {
         MC.AdminMenu.Close();

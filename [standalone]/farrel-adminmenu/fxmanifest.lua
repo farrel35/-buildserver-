@@ -31,12 +31,5 @@ files {
     "nui/webfonts/*.woff2",
 }
 
-exports {
-    'CreateLog'
-}
-
-server_exports {
-    'CreateLog'
-} 
 
 lua54 'yes'

@@ -2,20 +2,19 @@ LoggedIn, Group = false, nil
  
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
-	Citizen.SetTimeout(1250, function()
+	SetTimeout(1250, function()
         RefreshMenu('All')
         ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
             Group = PGroup
         end)
-        exports['farrel-adminmenu']:CreateLog('Player Logged In', 'Player Logged In')
         LoggedIn = true
     end)
 end)
 RegisterCommand('gperm', function(source, args, RawCommand) 
+    RefreshMenu('All')
     ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
         Group = PGroup
     end)
-    
 end, false)
 
 RegisterNetEvent('esx:onPlayerDeath')
@@ -23,18 +22,16 @@ AddEventHandler('esx:onPlayerDeath', function(xPlayer)
     ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
         Group = PGroup
     end)
-    exports['farrel-adminmenu']:CreateLog('Player Logged Out', 'Player Logged Out')
     LoggedIn = false
 end)
 
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
-    Citizen.SetTimeout(1250, function()
+    SetTimeout(1250, function()
         RefreshMenu('All')
         ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
             Group = PGroup
         end)
-        exports['farrel-adminmenu']:CreateLog('Player Logged In', 'Player Logged In')
         LoggedIn = true
     end)
 end)
@@ -43,9 +40,9 @@ end)
 
 -- [ Threads ] --
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(4)
+        Wait(4)
         if LoggedIn then
             if BlipsEnabled then
                 if BlipData ~= nil then
@@ -66,15 +63,15 @@ Citizen.CreateThread(function()
                         end
                     end    
                 end
-                Citizen.Wait(5000)
+                Wait(5000)
             else
                 if AllPlayerBlips ~= nil then
                     DeletePlayerBlips()
-                    Citizen.Wait(450)
+                    Wait(450)
                 end
             end
         else
-            Citizen.Wait(450)
+            Wait(450)
         end
     end
 end)
@@ -90,24 +87,16 @@ RegisterNetEvent('mc-admin/client/try-open-menu', function(KeyPress)
     if not IsPlayerAdmin() then return end
     -- if KeyPress then if not CanBind() then return end end
 
-    -- local Bans = GetBans()
     local Players = GetPlayers()
-    -- local Logs = GetLogs()
 
     SetCursorLocation(0.87, 0.15)
     SetNuiFocus(true, true)
     SendNUIMessage({
         Action = 'Open',
         Debug = Config.Settings['Debug'],
-
-        -- Bans = Bans,
         AllPlayers = Players,
-        -- Logs = Logs,
         AdminItems = Config.AdminMenus,
         Favorited = Config.FavoritedItems,
-        PinnedPlayers = Config.PinnedTargets,
-        MenuOptions = Config.AdminOptions,
-        BanTypes = Config.BanTimeCategories,
     })
 end)
 
@@ -132,32 +121,6 @@ RegisterNUICallback('Admin/ToggleFavorite', function(Data, Cb)
     Cb('Ok')
 end)
 
-RegisterNUICallback('Admin/TogglePinnedTarget', function(Data, Cb)
-    Config.PinnedTargets[Data.Id] = Data.Toggle
-    SetKvp("mc-adminmenu-pinned_targets", json.encode(Config.PinnedTargets), "Targets")
-    Cb('Ok')
-end)
-
-RegisterNUICallback('Admin/ToggleOption', function(Data, Cb)
-    Config.AdminOptions[Data.Id] = Data.Toggle
-    SetKvp("mc-adminmenu-options", json.encode(Config.AdminOptions), "Options")
-    Cb('Ok')
-end)
-
-RegisterNUICallback("Admin/UnbanPlayer", function(Data, Cb)
-    TriggerServerEvent('mc-admin/server/unban-player', Data.PData.BanId)
-    SetTimeout(500, function()
-        UpdateMenu()
-    end)
-    Cb('Ok')
-end)
-
-RegisterNUICallback('Admin/GetCharData', function(Data, Cb)
-    ESX.TriggerServerCallback('mc-admin/server/get-player-data', function(PlayerData)
-        Cb(PlayerData)
-    end, Data.License)
-end)
-
 RegisterNUICallback("Admin/Close", function(Data, Cb)
    SetNuiFocus(false, false)
    Cb('Ok')
@@ -167,15 +130,6 @@ RegisterNUICallback("Admin/DevMode", function(Data, Cb)
     local Bool = Data.Toggle
     ToggleDevMode(Bool)
     Cb('Ok')
-end)
-
-RegisterNUICallback("Admin/GetDateDifference", function(Data, Cb)
-    ESX.TriggerServerCallback('mc-admin/server/get-date-difference', function(FBans, CAmount)
-        Cb({
-            Bans = FBans, 
-            Amount = CAmount,
-        })
-    end, Data.BanList, Data.CType)
 end)
 
 RegisterNUICallback('Admin/TriggerAction', function(Data, Cb) 

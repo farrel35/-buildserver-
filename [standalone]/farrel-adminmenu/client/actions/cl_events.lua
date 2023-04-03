@@ -288,14 +288,14 @@ RegisterNetEvent('Admin:Toggle:PlayerNames', function()
     if NamesEnabled then
         local Players = GetPlayersInArea(nil, 15.0)
 
-        Citizen.CreateThread(function()
+        CreateThread(function()
             while NamesEnabled do
-                Citizen.Wait(2000)
+                Wait(2000)
                 Players = GetPlayersInArea(nil, 15.0)
             end
         end)
 
-        Citizen.CreateThread(function()
+        CreateThread(function()
             while NamesEnabled do
                 for k, v in pairs(Players) do
                     local Ped = GetPlayerPed(GetPlayerFromServerId(tonumber(v['ServerId'])))
@@ -306,7 +306,7 @@ RegisterNetEvent('Admin:Toggle:PlayerNames', function()
                     DrawText3D(vector3(PedCoords.x, PedCoords.y, PedCoords.z + 0.5), ('[%s] - %s ~n~'.._U("health")..': %s - '.._U("armor")..': %s'):format(v['ServerId'], v['Name'], math.floor(PedHealth), math.floor(PedArmor)))
                 end
                 
-                Citizen.Wait(1)
+                Wait(1)
             end
         end)
     end

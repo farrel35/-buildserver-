@@ -29,7 +29,6 @@ local type = type
 noClipEnabled = false
 local freecamVeh = 0
 
-local Wait = Citizen.Wait
 local vector3 = vector3
 local IsPauseMenuActive = IsPauseMenuActive
 local GetSmartControlNormal = GetSmartControlNormal
@@ -83,7 +82,7 @@ function toggleFreecam(enabled)
         SetFreecamActive(true)
         StartFreecamThread()
 
-        Citizen.CreateThread(function()
+        CreateThread(function()
             while IsFreecamActive() do
                 SetEntityLocallyInvisible(ped)
                 if freecamVeh > 0 then
@@ -195,7 +194,7 @@ end
 -------------------------------------------------------------------------------
 function StartFreecamThread()
   -- Camera/Pos updating thread
-  Citizen.CreateThread(function ()
+  CreateThread(function ()
     local ped = PlayerPedId()
     local initialPos = GetEntityCoords(ped)
     SetFreecamPosition(initialPos[1], initialPos[2], initialPos[3])
@@ -237,7 +236,7 @@ function StartFreecamThread()
   end
   
   --Scaleform drawing thread
-  Citizen.CreateThread(function()
+  CreateThread(function()
     local scaleform = RequestScaleformMovie("instructional_buttons")
     while not HasScaleformMovieLoaded(scaleform) do
       Wait(1)

@@ -12,11 +12,6 @@ local DRUNK_DRIVING_EFFECTS = {
 
 -- [ Functions ] --
 
-function CreateLog(Type, Log, Data)
-    ESX.TriggerServerCallback('mc-admin/server/create-log', function(result)
-    end, Type, Log, Data)
-end
-
 function ToggleDevMode(Bool)
     TriggerEvent('qb-admin:client:ToggleDevmode')
     if Bool then
@@ -29,21 +24,13 @@ function ToggleDevMode(Bool)
 end
 
 function UpdateMenu()
-    -- local Bans = GetBans()
     local Players = GetPlayers()
-    -- local Logs = GetLogs()
     SendNUIMessage({
         Action = 'Update',
         Debug = Config.Settings['Debug'],
-
-        -- Bans = Bans,
         AllPlayers = Players,
-        -- Logs = Logs,
         AdminItems = Config.AdminMenus,
         Favorited = Config.FavoritedItems,
-        PinnedPlayers = Config.PinnedTargets,
-        MenuOptions = Config.AdminOptions,
-        BanTypes = Config.BanTimeCategories,
     })
 end
 
@@ -54,11 +41,7 @@ end
 
 function ResetMenuKvp()
     SetResourceKvp("mc-adminmenu-favorites", "[]")
-    SetResourceKvp("mc-adminmenu-pinned_targets", "[]")
-    SetResourceKvp("mc-adminmenu-options", "[]")
     Config.FavoritedItems = {}
-    Config.PinnedTargets = {}
-    Config.AdminOptions = {}
     RefreshMenu('All')
 end
 
@@ -71,38 +54,12 @@ function RefreshMenu(Type)
         else
             Config.FavoritedItems = json.decode(GetResourceKvpString("mc-adminmenu-favorites"))
         end
-    elseif Type == 'Targets' then
-        if GetResourceKvpString("mc-adminmenu-pinned_targets") == nil or GetResourceKvpString("mc-adminmenu-pinned_targets") == "[]" then
-            Config.PinnedTargets = GeneratePinnedPlayers()
-            SetResourceKvp("mc-adminmenu-pinned_targets", json.encode(Config.PinnedTargets))    
-        else
-            Config.PinnedTargets = json.decode(GetResourceKvpString("mc-adminmenu-pinned_targets"))
-        end
-    elseif Type == 'Options'then
-        if GetResourceKvpString("mc-adminmenu-options") == nil or GetResourceKvpString("mc-adminmenu-options") == "[]" then
-            Config.AdminOptions = GenerateAdminOptions()
-            SetResourceKvp("mc-adminmenu-options", json.encode(Config.AdminOptions))
-        else
-            Config.AdminOptions = json.decode(GetResourceKvpString("mc-adminmenu-options"))
-        end
     elseif Type == 'All' then
         if GetResourceKvpString("mc-adminmenu-favorites") == nil or GetResourceKvpString("mc-adminmenu-favorites") == "[]" then
             Config.FavoritedItems = GenerateFavorites()
             SetResourceKvp("mc-adminmenu-favorites", json.encode(Config.FavoritedItems))
         else
             Config.FavoritedItems = json.decode(GetResourceKvpString("mc-adminmenu-favorites"))
-        end
-        if GetResourceKvpString("mc-adminmenu-pinned_targets") == nil or GetResourceKvpString("mc-adminmenu-pinned_targets") == "[]" then
-            Config.PinnedTargets = GeneratePinnedPlayers()
-            SetResourceKvp("mc-adminmenu-pinned_targets", json.encode(Config.PinnedTargets))    
-        else
-            Config.PinnedTargets = json.decode(GetResourceKvpString("mc-adminmenu-pinned_targets"))
-        end
-        if GetResourceKvpString("mc-adminmenu-options") == nil or GetResourceKvpString("mc-adminmenu-options") == "[]" then
-            Config.AdminOptions = GenerateAdminOptions()
-            SetResourceKvp("mc-adminmenu-options", json.encode(Config.AdminOptions))
-        else
-            Config.AdminOptions = json.decode(GetResourceKvpString("mc-adminmenu-options"))
         end
     end
     UpdateMenu()
@@ -158,13 +115,6 @@ function GetPlayersInArea(Coords, Radius)
 	return Citizen.Await(Prom)
 end
 
--- function GetBans()
---     local Prom = promise:new()
---     ESX.TriggerServerCallback("mc-admin/server/get-bans", function(Bans)
---         Prom:resolve(Bans)
---     end)
---     return Citizen.Await(Prom)
--- end
 
 function GetPlayers()
     local Prom = promise:new()
@@ -174,60 +124,6 @@ function GetPlayers()
     return Citizen.Await(Prom)
 end
 
--- -- function GetJobs()
--- --     local JobList = {}
--- --     for k, v in pairs(QBShared.Jobs) do
--- --         JobList[#JobList + 1] = {
--- --             Text = v.label,
--- --             Label = ' ['..k..']'
--- --         }
--- --         -- table.sort(JobList, function(a, b)
--- --         --     return a.Label < b.Label
--- --         -- end)
--- --     end
--- --     return JobList
--- -- end
-
--- function GetLogs()
---     local Prom = promise:new()
---     ESX.TriggerServerCallback("mc-admin/server/get-logs", function(Logs)
---         Prom:resolve(Logs)
---     end)
---     return Citizen.Await(Prom)
--- end
-
--- -- function GetInventoryItems()
--- --     local Inventory = {}
--- --     for k, v in pairs(QBShared.Items) do
--- --         Inventory[#Inventory + 1] = {
--- --             Text = v.name
--- --         }
--- --         -- table.sort(Inventory, function(a, b)
--- --         --     return a.Text < b.Text
--- --         -- end)
--- --     end
--- --     return Inventory
--- -- end
-
--- -- function GetAddonVehicles()
--- --     local AddonVehicles = {}
--- --     for k, v in pairs(QBShared.Vehicles) do
--- --         if Config.Settings['Cars']['Custom'] then
--- --             if v['category'] == Config.Settings['Cars']['CustomCat'] then
--- --                 AddonVehicles[#AddonVehicles + 1] = {
--- --                     Text = k,
--- --                     Label = ' ['..v['brand']..' '..v['name']..']'
--- --                 }
--- --             end
--- --         else
--- --             AddonVehicles[#AddonVehicles + 1] = {
--- --                 Text = k,
--- --                 Label = ' ['..v['brand']..' '..v['name']..']'
--- --             }
--- --         end
--- --     end
--- --     return AddonVehicles
--- -- end
 
 -- -- Generate
 
@@ -237,37 +133,6 @@ function GenerateFavorites()
         for k, v in pairs(Menu.Items) do
             Retval[v.Id] = false
         end
-    end
-    return Retval
-end
-
-function GeneratePinnedPlayers()
-    local Retval = {}
-    local Players = GetPlayers()
-    for k, v in pairs(Players) do
-        Retval[v.License] = false
-    end
-    return Retval
-end
-
-function GenerateAdminOptions()
-    local Retval = {}
-    -- Large Default
-    Retval['LargeDefault'] = false
-    -- Bind Open
-    Retval['BindOpen'] = true
-    -- Tooltips
-    Retval['Tooltips'] = true
-    -- Resizer
-    Retval['Resizer'] = true
-
-    return Retval
-end
-
-function CanBind()
-    local Retval = false
-    if Config.AdminOptions['BindOpen'] ~= nil and Config.AdminOptions['BindOpen'] then 
-        Retval = true 
     end
     return Retval
 end
