@@ -1,26 +1,27 @@
-LoggedIn, Group = false, nil
+LoggedIn, isAdmin = false, nil
  
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	SetTimeout(1250, function()
         RefreshMenu('All')
-        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
-            Group = PGroup
+        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+            isAdmin = admin
         end)
         LoggedIn = true
     end)
 end)
+
 RegisterCommand('gperm', function(source, args, RawCommand) 
     RefreshMenu('All')
-    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
-        Group = PGroup
+    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+        isAdmin = admin
     end)
 end, false)
 
 RegisterNetEvent('esx:onPlayerDeath')
 AddEventHandler('esx:onPlayerDeath', function(xPlayer)
-    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
-        Group = PGroup
+    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+        isAdmin = admin
     end)
     LoggedIn = false
 end)
@@ -29,8 +30,8 @@ RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
     SetTimeout(1250, function()
         RefreshMenu('All')
-        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(PGroup)
-            Group = PGroup
+        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+            isAdmin = admin
         end)
         LoggedIn = true
     end)
@@ -79,12 +80,14 @@ end)
 -- [ Mapping ] --
 
 RegisterKeyMapping('adminmenu', _U('keymapping_desc'), 'keyboard', Config.Settings['DefaultOpenKeybind'])
-RegisterCommand('adminmenu', function(source, args, RawCommand) TriggerServerEvent('mc-admin/server/try-open-menu', true) end, false)
+RegisterCommand('adminmenu', function(source, args, RawCommand) 
+    TriggerEvent('mc-admin/client/try-open-menu') 
+end, false)
 
 -- [ Events ] --
 
-RegisterNetEvent('mc-admin/client/try-open-menu', function(KeyPress)
-    if not IsPlayerAdmin() then return end
+RegisterNetEvent('mc-admin/client/try-open-menu', function()
+    if not isAdmin then return end
     -- if KeyPress then if not CanBind() then return end end
 
     local Players = GetPlayers()
@@ -108,7 +111,7 @@ RegisterNetEvent('mc-admin/client/force-close', function()
 end)
 
 RegisterNetEvent("mc-admin/client/reset-menu", function()
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     ResetMenuKvp()
 end)
@@ -133,7 +136,7 @@ RegisterNUICallback("Admin/DevMode", function(Data, Cb)
 end)
 
 RegisterNUICallback('Admin/TriggerAction', function(Data, Cb) 
-    if IsPlayerAdmin() then
+    if isAdmin then
         if Data.EventType == nil then Data.EventType = 'Client' end
         if Data.Event ~= nil and Data.EventType ~= nil then
             if Data.EventType == 'Client' then

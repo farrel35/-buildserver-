@@ -65,14 +65,6 @@ function RefreshMenu(Type)
     UpdateMenu()
 end
 
-function IsPlayerAdmin()
-    local Retval = false
-    if Group then
-        Retval = true
-    end
-    return Retval
-end
-
 function DebugLog(Message)
     if Config.Settings['Debug'] then
         print('[DEBUG]: ', Message)
@@ -106,6 +98,33 @@ function DeletePlayerBlips()
 end
 
 -- Get
+function GetInventoryItems()
+    local Inventory = {}
+    for k, v in pairs(exports.ox_inventory:Items()) do
+        Inventory[#Inventory + 1] = {
+            Text = k,
+            Label = v.label
+        }
+        table.sort(Inventory, function(a, b)
+             return a.Text > b.Text
+        end)
+    end
+
+    return Inventory
+end
+
+function GetJobs()
+    local Jobs = {}
+    ESX.TriggerServerCallback('esx_joblisting:getJobsList', function(jobs)
+        for k, v in pairs(jobs) do
+            Jobs[#Jobs + 1] = {
+                Text = v.name
+            }
+        end
+    end)
+
+    return Jobs
+end
 
 function GetPlayersInArea(Coords, Radius)
 	local Prom = promise:new()

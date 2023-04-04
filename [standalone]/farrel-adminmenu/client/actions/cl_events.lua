@@ -5,13 +5,13 @@ BlipsEnabled, NamesEnabled, GodmodeEnabled, AllPlayerBlips, BlipData = false, fa
 -- [ Events ] --
 
 RegisterNetEvent("Admin:Godmode", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/toggle-godmode', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Toggle:Noclip', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -29,7 +29,7 @@ RegisterNetEvent('Admin:Toggle:Noclip', function(Result)
 end)
 
 RegisterNetEvent('Admin:Fix:Vehicle', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -43,7 +43,7 @@ RegisterNetEvent('Admin:Fix:Vehicle', function(Result)
 end)
 
 RegisterNetEvent('Admin:Delete:Vehicle', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
     
     SendNUIMessage({
         Action = 'Close',
@@ -57,7 +57,7 @@ RegisterNetEvent('Admin:Delete:Vehicle', function(Result)
 end)
 
 RegisterNetEvent('Admin:Spawn:Vehicle', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -66,7 +66,7 @@ RegisterNetEvent('Admin:Spawn:Vehicle', function(Result)
 end)
 
 RegisterNetEvent('Admin:Teleport:Marker', function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -75,7 +75,7 @@ RegisterNetEvent('Admin:Teleport:Marker', function(Result)
 end)
 
 RegisterNetEvent('Admin:Teleport:Coords', function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     if Result['x-coord'] ~= '' and Result['y-coord'] ~= '' and Result['z-coord'] ~= '' then
         SendNUIMessage({
@@ -86,7 +86,7 @@ RegisterNetEvent('Admin:Teleport:Coords', function(Result)
 end)
 
 RegisterNetEvent('Admin:Teleport', function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -95,13 +95,13 @@ RegisterNetEvent('Admin:Teleport', function(Result)
 end)
 
 RegisterNetEvent("Admin:Chat:Say", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/chat-say', Result['message'])
 end)
 
 RegisterNetEvent('Admin:Open:Clothing', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -110,19 +110,19 @@ RegisterNetEvent('Admin:Open:Clothing', function(Result)
 end)
 
 RegisterNetEvent('Admin:Revive', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/revive-target', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Remove:Stress', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/remove-stress', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Change:Model', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     if Result['model'] ~= '' then
         local Model = GetHashKey(Result['model'])
@@ -133,25 +133,25 @@ RegisterNetEvent('Admin:Change:Model', function(Result)
 end)
 
 RegisterNetEvent('Admin:Reset:Model', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/reset-skin', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Armor', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/set-armor', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Food:Drink', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/set-food-drink', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Request:Job', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     if Result['job'] ~= '' then
         TriggerServerEvent('mc-admin/server/request-job', Result['player'], Result['job'])
@@ -159,56 +159,56 @@ RegisterNetEvent('Admin:Request:Job', function(Result)
 end)
 
 RegisterNetEvent("Admin:Drunk", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
 
     TriggerServerEvent('mc-admin/server/drunk', Result['player'])
 end)
 
 RegisterNetEvent("Admin:Animal:Attack", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/animal-attack', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Set:Fire', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/set-fire', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Fling:Player', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/fling-player', Result['player'])
 end)
 
 RegisterNetEvent('Admin:GiveItem', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
     
     TriggerServerEvent('mc-admin/server/give-item', Result['player'], Result['item'], Result['amount'])
 end)
 
 RegisterNetEvent('Admin:Ban', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/ban-player', Result['player'], Result['expire'], Result['reason'])
 end)
 
 RegisterNetEvent('Admin:Unban', function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     TriggerServerEvent("mc-admin/server/unban-player", Result['player'])
 end)
 
 RegisterNetEvent('Admin:Kick', function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/kick-player', Result['player'], Result['reason'])
 end)
 
 RegisterNetEvent("Admin:Copy:Coords", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     local CoordsType = Result['type']
     local CoordsLayout = nil
@@ -251,13 +251,13 @@ RegisterNetEvent("Admin:Copy:Coords", function(Result)
 end)
 
 RegisterNetEvent("Admin:Fart:Player", function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     TriggerServerEvent('mc-admin/server/play-sound', Result['player'], Result['fart'])
 end)
 
 RegisterNetEvent('Admin:Toggle:PlayerBlips', function()
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     BlipsEnabled = not BlipsEnabled
 
@@ -275,7 +275,7 @@ RegisterNetEvent('Admin:Toggle:PlayerBlips', function()
 end)
 
 RegisterNetEvent('Admin:Toggle:PlayerNames', function()
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     NamesEnabled = not NamesEnabled
 
@@ -313,7 +313,7 @@ RegisterNetEvent('Admin:Toggle:PlayerNames', function()
 end)
 
 RegisterNetEvent('Admin:Toggle:Spectate', function(Result)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     if not isSpectateEnabled then
         TriggerServerEvent('mc-admin/server/start-spectate', Result['player'])
@@ -325,7 +325,7 @@ RegisterNetEvent('Admin:Toggle:Spectate', function(Result)
 end)
 
 RegisterNetEvent("Admin:OpenInv", function(Result)
-     if not IsPlayerAdmin() then return end
+     if not isAdmin then return end
 
     SendNUIMessage({
         Action = 'Close',
@@ -388,13 +388,13 @@ RegisterNetEvent('mc-admin/client/fling-player', function()
 end)
 
 RegisterNetEvent('mc-admin/client/DeletePlayerBlips', function()
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     DeletePlayerBlips()
 end)
 
 RegisterNetEvent('mc-admin/client/UpdatePlayerBlips', function(Data)
-    if not IsPlayerAdmin() then return end
+    if not isAdmin then return end
 
     BlipData = Data
 end)

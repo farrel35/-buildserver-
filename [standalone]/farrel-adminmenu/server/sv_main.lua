@@ -2,8 +2,8 @@
 SpectateData = {}
 
 ESX.RegisterServerCallback('mc-adminmenu/server/get-permission', function(source, Cb)
-    local Group = IsPlayerAdmin(source)
-    Cb(Group)
+    local admin = IsPlayerAdmin(source)
+    Cb(admin)
 end)
 
 ESX.RegisterServerCallback('mc-admin/server/get-active-players-in-radius', function(Source, Cb, Coords, Radius)
@@ -34,13 +34,6 @@ ESX.RegisterServerCallback('mc-admin/server/get-players', function(source, Cb)
         }
     end
     Cb(PlayerList)
-end)
-
-RegisterNetEvent("mc-admin/server/try-open-menu", function(KeyPress)
-    local src = source
-    if not IsPlayerAdmin(src) then return end
-    
-    TriggerClientEvent('mc-admin/client/try-open-menu', src, KeyPress)
 end)
 
 RegisterNetEvent("mc-admin/server/ban-player", function(ServerId, Expires, Reason)
@@ -84,27 +77,27 @@ end)
 RegisterNetEvent("mc-admin/server/kick-player", function(ServerId, Reason)
     local src = source
     if not IsPlayerAdmin(src) then return end
-
+    
     DropPlayer(ServerId, Reason)
-    TriggerClientEvent('esx:showNotification', src, _U('banned'), 'success')
+    TriggerClientEvent('esx:showNotification', src, _U('kicked'), 'success')
 end)
 
 RegisterNetEvent("mc-admin/server/give-item", function(ServerId, ItemName, ItemAmount)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    TPlayer.Functions.AddItem(ItemName, ItemAmount, 'Admin-Menu-Give')
-    TriggerClientEvent('esx:showNotification', src, _U('gaveitem', {amount = ItemAmount, name = ItemName}), 'success')
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    xPlayer.addInventoryItem(ItemName, ItemAmount, 'Admin-Menu-Give')
+    TriggerClientEvent('esx:showNotification', src, _U('gaveitem', ItemAmount, ItemName), 'success')
 end)
 
 RegisterNetEvent("mc-admin/server/request-job", function(ServerId, JobName)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    TPlayer.Functions.SetJob(JobName, 1, 'Admin-Menu-Give-Job')
-    TriggerClientEvent('esx:showNotification', src, _U('setjob', {jobname = JobName}), 'success')
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    xPlayer.setJob(JobName, 0)
+    TriggerClientEvent('esx:showNotification', src, _U('setjob', JobName), 'success')
 end)
 
 RegisterNetEvent('mc-admin/server/start-spectate', function(ServerId)
@@ -227,12 +220,12 @@ RegisterNetEvent("mc-admin/server/set-food-drink", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    if TPlayer ~= nil then
-        TPlayer.Functions.SetMetaData('thirst', 100)
-        TPlayer.Functions.SetMetaData('hunger', 100)
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    if xPlayer ~= nil then
+        xPlayer.Functions.SetMetaData('thirst', 100)
+        xPlayer.Functions.SetMetaData('hunger', 100)
         TriggerClientEvent('hud:client:UpdateNeeds', ServerId, 100, 100)
-        TPlayer.Functions.Save()
+        xPlayer.Functions.Save()
         TriggerClientEvent('esx:showNotification', src, _U('gave_needs'), 'success')
     end
 end)
@@ -241,11 +234,11 @@ RegisterNetEvent("mc-admin/server/remove-stress", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    if TPlayer ~= nil then
-        TPlayer.Functions.SetMetaData('stress', 0)
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    if xPlayer ~= nil then
+        xPlayer.Functions.SetMetaData('stress', 0)
         TriggerClientEvent('hud:client:UpdateStress', ServerId, 0)
-        TPlayer.Functions.Save()
+        xPlayer.Functions.Save()
         TriggerClientEvent('esx:showNotification', src, _U('removed_stress'), 'success')
     end
 end)
@@ -254,8 +247,8 @@ RegisterNetEvent("mc-admin/server/set-armor", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    if TPlayer ~= nil then
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    if xPlayer ~= nil then
         SetPedArmour(GetPlayerPed(ServerId), 100)
         TriggerClientEvent('esx:showNotification', src, _U('gave_armor'), 'success')
     end
@@ -265,8 +258,8 @@ RegisterNetEvent("mc-admin/server/reset-skin", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local TPlayer = ESX.GetPlayerFromId(ServerId)
-    local ClothingData = MySQL.Sync.fetchAll('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { TPlayer.identifier, 1 })
+    local xPlayer = ESX.GetPlayerFromId(ServerId)
+    local ClothingData = MySQL.Sync.fetchAll('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { xPlayer.identifier, 1 })
     if ClothingData[1] ~= nil then
         TriggerClientEvent("qb-clothes:loadSkin", ServerId, false, ClothingData[1].model, ClothingData[1].skin)
     else

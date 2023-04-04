@@ -434,7 +434,7 @@ Config.AdminMenus = {
                         ['Id'] = 'job',
                         ['Name'] = 'Job',
                         ['Type'] = 'text-choice',
-                        -- ['Choices'] = GetJobs()
+                        ['Choices'] = GetJobs()
                     },
                 },
             },
@@ -454,7 +454,7 @@ Config.AdminMenus = {
                         ['Id'] = 'item',
                         ['Name'] = 'Item',
                         ['Type'] = 'input-choice',
-                        -- ['Choices'] = GetInventoryItems()
+                        ['Choices'] = GetInventoryItems()
                     },
                     {
                         ['Id'] = 'amount',
