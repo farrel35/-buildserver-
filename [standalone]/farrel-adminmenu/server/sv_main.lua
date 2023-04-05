@@ -1,6 +1,30 @@
 
 SpectateData = {}
 
+AddEventHandler("playerConnecting", function(playerName, setKickReason, deferrals)
+    local player = source
+    local identifier = ESX.GetIdentifier(player)
+
+    deferrals.defer()
+    deferrals.update(string.format(" Hello %s. Checking ban status!", playerName))
+    Wait(5000)
+    local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE identifier = ?', {identifier})
+
+    if data ~= nil then
+        if(data[1] == nil) then
+            deferrals.done()
+        else
+            local timeremaining = (disp_time(tonumber(data[1].expire)))
+            if(os.time() > tonumber(data[1].expire)) then
+                deferrals.done()
+                MySQL.update('DELETE FROM bans WHERE identifier = ?' , {identifier})
+            else
+                deferrals.done(string.format(_U("banned", data[1].banid, data[1].reason, os.date("%Y-%m-%d %H:%M",data[1].expire), data[1].bannedby)))
+            end
+        end
+    end
+end)
+
 ESX.RegisterServerCallback('farrel-adminmenu/server/get-permission', function(source, Cb)
     local admin = IsPlayerAdmin(source)
     Cb(admin)
@@ -40,22 +64,20 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local License = ESX.GetIdentifier(ServerId, 'license')
-    local BanData = MySQL.query.await('SELECT * FROM bans WHERE license = ?', {License})
+    local identifier = ESX.GetIdentifier(ServerId)
+    local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
     if BanData and BanData[1] ~= nil then
         for k, v in pairs(BanData) do
-            -- TriggerClientEvent('esx:showNotification', src, _U('already_banned', {player = GetPlayerName(ServerId), reason = v.reason}), 'error')
+            TriggerClientEvent('esx:showNotification', src, _U('already_banned',GetPlayerName(ServerId), v.reason), 'error')
         end
     else
         local Expiring, ExpireDate = GetBanTime(Expires)
         local Time = os.time()
-        local BanId = "BAN-"..math.random(11111, 99999)
-        MySQL.insert('INSERT INTO bans (banid, name, license, discord, ip, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        local BanId = "BAN-"..math.random(0, 99999)
+        MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             BanId,
             GetPlayerName(ServerId),
-            License,
-            ESX.GetIdentifier(ServerId, 'discord'),
-            ESX.GetIdentifier(ServerId, 'ip'),
+            identifier,
             Reason,
             GetPlayerName(src),
             ExpireDate,
@@ -68,8 +90,7 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
         if Expires == "Permanent" then
             DropPlayer(ServerId,  _U('perm_banned', Reason))
         else
-            print(reason)
-            DropPlayer(ServerId, _U('banned', Reason, Expires))
+            DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
         end
     end
 end)
@@ -330,3 +351,43 @@ RegisterNetEvent('farrel-adminmenu/server/give-vehicle', function(Steamhex, Mode
         end)
     end
 end)
+
+function disp_time(time)
+    local t = (os.difftime(time, os.time()))
+    local d = math.floor(t / 86400)
+    local h = math.floor((t % 86400) / 3600)
+    local m = math.floor((t % 3600) / 60)
+    local s = math.floor((t % 60))
+    return {days = d , hours = h , minutes = m, seconds = s}
+  end
+  
+RegisterCommand('gban', function(source, args, rawCommand)
+    -- TriggerClientEvent('chat:client:ClearChat', source)
+    local player = source
+    local steamIdentifier
+    local steamid  = false
+    local license  = false
+    local discord  = false
+    local xbl      = false
+    local liveid   = false
+    local ip       = false
+    for k,v in pairs(GetPlayerIdentifiers(player))do
+      if string.sub(v, 1, string.len("steam:")) == "steam:" then
+        steamid = v
+      elseif string.sub(v, 1, string.len("license:")) == "license:" then
+        license = v
+      elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+        xbl  = v
+      elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+        ip = v
+      elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+        discord = v
+      elseif string.sub(v, 1, string.len("live:")) == "live:" then
+        liveid = v
+      end
+    end
+
+    local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE license = ?', { steamid})
+    local timeremaining = (disp_time(tonumber(data[1].expire)))
+    print(', you are banned from this server! \n Your ban will be expired in '..timeremaining.days..' days, '..timeremaining.hours..' hours and '..timeremaining.seconds ..' seconds! ('..os.date("%Y-%m-%d %H:%M",data[1].expire)..') ')
+end, false)

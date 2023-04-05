@@ -202,12 +202,6 @@ RegisterNetEvent('Admin:Ban', function(Result)
     TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['player'], Result['expire'], Result['reason'])
 end)
 
-RegisterNetEvent('Admin:Unban', function(Result)
-     if not isAdmin then return end
-
-    TriggerServerEvent("farrel-adminmenu/server/unban-player", Result['player'])
-end)
-
 RegisterNetEvent('Admin:Kick', function(Result)
      if not isAdmin then return end
 
@@ -346,7 +340,7 @@ RegisterNetEvent("Admin:GiveVehicle", function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    
+
     if  Result['plate'] == nil or  Result['plate'] == "" then
         Result['plate'] = exports['esx_vehicleshop']:GeneratePlate()
     end

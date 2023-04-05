@@ -513,20 +513,6 @@ Config.AdminMenus = {
                 },
             },
             {
-                ['Id'] = 'unbanPlayer',
-                ['Name'] = 'Unban Player',
-                ['Event'] = 'Admin:Unban',
-                ['Collapse'] = true,
-                ['Options'] = {
-                    {
-                        ['Id'] = 'player',
-                        ['Name'] = 'Player',
-                        ['Type'] = 'input-choice',
-                        ['Choices'] = {}
-                    },
-                },
-            },
-            {
                 ['Id'] = 'kickPlayer',
                 ['Name'] = 'Kick Player',
                 ['Event'] = 'Admin:Kick',
