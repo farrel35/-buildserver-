@@ -131,7 +131,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'reviveRadius',
                 ['Name'] = 'Revive in Radius',
-                ['Event'] = 'mc-admin/server/revive-in-distance',
+                ['Event'] = 'farrel-adminmenu/server/revive-in-distance',
                 ['EventType'] = 'Server',
                 ['Collapse'] = false,
             },
@@ -184,7 +184,7 @@ Config.AdminMenus = {
                     {
                         ['Id'] = 'model',
                         ['Name'] = 'Model',
-                        ['Type'] = 'text-choice',
+                        ['Type'] = 'text',
                         -- ['Choices'] = GetAddonVehicles()
                     },
                 },

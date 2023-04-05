@@ -140,7 +140,7 @@ RegisterCommand('endSpectate', function()
     if isSpectateEnabled then
         toggleSpectate(storedTargetPed)
         preparePlayerForSpec(false)
-        TriggerServerEvent('mc-admin/server/stop-spectate')
+        TriggerServerEvent('farrel-adminmenu/server/stop-spectate')
     end
 end)
 

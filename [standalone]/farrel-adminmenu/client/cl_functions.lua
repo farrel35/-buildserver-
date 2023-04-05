@@ -40,7 +40,7 @@ function SetKvp(Name, Data, Type)
 end
 
 function ResetMenuKvp()
-    SetResourceKvp("mc-adminmenu-favorites", "[]")
+    SetResourceKvp("farrel-adminmenu-favorites", "[]")
     Config.FavoritedItems = {}
     RefreshMenu('All')
 end
@@ -48,18 +48,18 @@ end
 function RefreshMenu(Type)
     if Type == 'Favorites' then
         -- Favorites
-        if GetResourceKvpString("mc-adminmenu-favorites") == nil or GetResourceKvpString("mc-adminmenu-favorites") == "[]" then
+        if GetResourceKvpString("farrel-adminmenu-favorites") == nil or GetResourceKvpString("farrel-adminmenu-favorites") == "[]" then
             Config.FavoritedItems = GenerateFavorites()
-            SetResourceKvp("mc-adminmenu-favorites", json.encode(Config.FavoritedItems))
+            SetResourceKvp("farrel-adminmenu-favorites", json.encode(Config.FavoritedItems))
         else
-            Config.FavoritedItems = json.decode(GetResourceKvpString("mc-adminmenu-favorites"))
+            Config.FavoritedItems = json.decode(GetResourceKvpString("farrel-adminmenu-favorites"))
         end
     elseif Type == 'All' then
-        if GetResourceKvpString("mc-adminmenu-favorites") == nil or GetResourceKvpString("mc-adminmenu-favorites") == "[]" then
+        if GetResourceKvpString("farrel-adminmenu-favorites") == nil or GetResourceKvpString("farrel-adminmenu-favorites") == "[]" then
             Config.FavoritedItems = GenerateFavorites()
-            SetResourceKvp("mc-adminmenu-favorites", json.encode(Config.FavoritedItems))
+            SetResourceKvp("farrel-adminmenu-favorites", json.encode(Config.FavoritedItems))
         else
-            Config.FavoritedItems = json.decode(GetResourceKvpString("mc-adminmenu-favorites"))
+            Config.FavoritedItems = json.decode(GetResourceKvpString("farrel-adminmenu-favorites"))
         end
     end
     UpdateMenu()
@@ -103,7 +103,6 @@ function GetInventoryItems()
     for k, v in pairs(exports.ox_inventory:Items()) do
         Inventory[#Inventory + 1] = {
             Text = k,
-            Label = v.label
         }
         table.sort(Inventory, function(a, b)
              return a.Text > b.Text
@@ -128,7 +127,7 @@ end
 
 function GetPlayersInArea(Coords, Radius)
 	local Prom = promise:new()
-	ESX.TriggerServerCallback('mc-admin/server/get-active-players-in-radius', function(Players)
+	ESX.TriggerServerCallback('farrel-adminmenu/server/get-active-players-in-radius', function(Players)
 		Prom:resolve(Players)
 	end, Coords, Radius)
 	return Citizen.Await(Prom)
@@ -137,7 +136,7 @@ end
 
 function GetPlayers()
     local Prom = promise:new()
-    ESX.TriggerServerCallback("mc-admin/server/get-players", function(Players)
+    ESX.TriggerServerCallback("farrel-adminmenu/server/get-players", function(Players)
         Prom:resolve(Players)
     end)
     return Citizen.Await(Prom)

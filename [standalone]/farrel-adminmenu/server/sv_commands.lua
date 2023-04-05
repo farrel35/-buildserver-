@@ -6,11 +6,11 @@
 
 -- Mercy.Commands.Add('newmenu', _U("keymapping_desc"), {}, false, function(source)
 --     local src = source
---     TriggerClientEvent('mc-admin/client/try-open-menu', src, false)
+--     TriggerClientEvent('farrel-adminmenu/client/try-open-menu', src, false)
 -- end, 'admin')
 
 -- Mercy.Commands.Add('resetmenu', _U("reset_data"), {}, false, function(source)
---     TriggerClientEvent('mc-admin/client/reset-menu', -1, false)
+--     TriggerClientEvent('farrel-adminmenu/client/reset-menu', -1, false)
 -- end, 'admin')
 
 -- Console

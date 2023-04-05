@@ -1,88 +1,88 @@
-MC = {}
-MC.AdminMenu = {}
+FARREL = {}
+FARREL.AdminMenu = {}
 
-MC.AdminMenu.Action = {}
-MC.AdminMenu.Category = {}
-MC.AdminMenu.Sidebar = {}
-MC.AdminMenu.PlayerList = {}
-MC.AdminMenu.SizeChange = {}
+FARREL.AdminMenu.Action = {}
+FARREL.AdminMenu.Category = {}
+FARREL.AdminMenu.Sidebar = {}
+FARREL.AdminMenu.PlayerList = {}
+FARREL.AdminMenu.SizeChange = {}
 
-MC.AdminMenu.DebugEnabled = null;
-MC.AdminMenu.Opened = false;
-MC.AdminMenu.IsGeneratingDropdown = false;
+FARREL.AdminMenu.DebugEnabled = null;
+FARREL.AdminMenu.Opened = false;
+FARREL.AdminMenu.IsGeneratingDropdown = false;
 
-MC.AdminMenu.FavoritedItems = {};
-MC.AdminMenu.EnabledItems = {};
+FARREL.AdminMenu.FavoritedItems = {};
+FARREL.AdminMenu.EnabledItems = {};
 
-MC.AdminMenu.Players = null;
-MC.AdminMenu.Items = null;
-MC.AdminMenu.CurrentTarget = null;
-MC.AdminMenu.Size = "Small";
+FARREL.AdminMenu.Players = null;
+FARREL.AdminMenu.Items = null;
+FARREL.AdminMenu.CurrentTarget = null;
+FARREL.AdminMenu.Size = "Small";
 
 // Editable
 
-MC.AdminMenu.SizeChange.LeftArrow = '<i class="fas fa-chevron-left"></i>'; // Arrow when menu can be changed to large
-MC.AdminMenu.SizeChange.RightArrow = '<i class="fas fa-chevron-right"></i>'; // Arrow when menu can be changed to small
+FARREL.AdminMenu.SizeChange.LeftArrow = '<i class="fas fa-chevron-left"></i>'; // Arrow when menu can be changed to large
+FARREL.AdminMenu.SizeChange.RightArrow = '<i class="fas fa-chevron-right"></i>'; // Arrow when menu can be changed to small
 
 // Code
 
-MC.AdminMenu.Update = function(Data) {
+FARREL.AdminMenu.Update = function(Data) {
     DebugMessage(`Menu Updating`);
-    MC.AdminMenu.FavoritedItems = Data.Favorited;
-    MC.AdminMenu.Players = Data.AllPlayers;
-    MC.AdminMenu.Items = Data.AdminItems;
-    if (MC.AdminMenu.Sidebar.Selected == 'Actions') {
-        MC.AdminMenu.LoadItems();
-    } else if (MC.AdminMenu.Sidebar.Selected == 'PlayerList') {
-        MC.AdminMenu.LoadPlayerList();
+    FARREL.AdminMenu.FavoritedItems = Data.Favorited;
+    FARREL.AdminMenu.Players = Data.AllPlayers;
+    FARREL.AdminMenu.Items = Data.AdminItems;
+    if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
+        FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerList') {
+        FARREL.AdminMenu.LoadPlayerList();
     }
 }
  
-MC.AdminMenu.Open = function(Data) {
-    MC.AdminMenu.DebugEnabled = Data.Debug;
-    MC.AdminMenu.FavoritedItems = Data.Favorited;
+FARREL.AdminMenu.Open = function(Data) {
+    FARREL.AdminMenu.DebugEnabled = Data.Debug;
+    FARREL.AdminMenu.FavoritedItems = Data.Favorited;
     DebugMessage(`Menu Opening`);
     $('.menu-main-container').css('pointer-events', 'auto');
     $('.menu-main-container').fadeIn(450, function() {
-        if (MC.AdminMenu.Items == null && MC.AdminMenu.Players == null) {
-            MC.AdminMenu.Players = Data.AllPlayers
-            MC.AdminMenu.Items = Data.AdminItems
-            $('.menu-pages').find(`[data-Page="${MC.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
-            MC.AdminMenu.LoadCategory(MC.AdminMenu.Sidebar.Selected);
+        if (FARREL.AdminMenu.Items == null && FARREL.AdminMenu.Players == null) {
+            FARREL.AdminMenu.Players = Data.AllPlayers
+            FARREL.AdminMenu.Items = Data.AdminItems
+            $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
+            FARREL.AdminMenu.LoadCategory(FARREL.AdminMenu.Sidebar.Selected);
         };
-        MC.AdminMenu.Players = Data.AllPlayers
-        MC.AdminMenu.Opened = true;
+        FARREL.AdminMenu.Players = Data.AllPlayers
+        FARREL.AdminMenu.Opened = true;
     });
-    if (MC.AdminMenu.Sidebar.Selected == 'Actions') {
-        MC.AdminMenu.LoadItems();
-    } else if (MC.AdminMenu.Sidebar.Selected == 'PlayerList') {
-        MC.AdminMenu.LoadPlayerList();
+    if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
+        FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerList') {
+        FARREL.AdminMenu.LoadPlayerList();
     }
 }
 
 
-MC.AdminMenu.Close = function() {
+FARREL.AdminMenu.Close = function() {
     DebugMessage(`Menu Closing`);
-    MC.AdminMenu.ClearDropdown();
+    FARREL.AdminMenu.ClearDropdown();
     $.post(`https://${GetParentResourceName()}/Admin/Close`);
     $('.menu-main-container').css('pointer-events', 'none');
     $('.menu-main-container').fadeOut(150, function() {
-        MC.AdminMenu.Opened = false; 
+        FARREL.AdminMenu.Opened = false; 
     });
 }
 
-MC.AdminMenu.ChangeSize = function(ForceSize) {
+FARREL.AdminMenu.ChangeSize = function(ForceSize) {
     let Styles = getComputedStyle(document.body);
-    if (ForceSize != null && ForceSize == 'Large' || MC.AdminMenu.Size == 'Small' && ForceSize == null) {
-        $('.menu-size-change').html(MC.AdminMenu.SizeChange.RightArrow);
-        MC.AdminMenu.Size = 'Large';
+    if (ForceSize != null && ForceSize == 'Large' || FARREL.AdminMenu.Size == 'Small' && ForceSize == null) {
+        $('.menu-size-change').html(FARREL.AdminMenu.SizeChange.RightArrow);
+        FARREL.AdminMenu.Size = 'Large';
         $('.menu-main-container').css({
             width: Styles.getPropertyValue('--menu-large-width'),
             right: 19+"%",
         });
-    } else if (ForceSize != null && ForceSize == 'Small' || MC.AdminMenu.Size == 'Large' && ForceSize == null) {
-        $('.menu-size-change').html(MC.AdminMenu.SizeChange.LeftArrow);
-        MC.AdminMenu.Size = 'Small';
+    } else if (ForceSize != null && ForceSize == 'Small' || FARREL.AdminMenu.Size == 'Large' && ForceSize == null) {
+        $('.menu-size-change').html(FARREL.AdminMenu.SizeChange.LeftArrow);
+        FARREL.AdminMenu.Size = 'Small';
         $('.menu-main-container').css({
             width: Styles.getPropertyValue('--menu-small-width'),
             right: 3+"%",
@@ -90,7 +90,7 @@ MC.AdminMenu.ChangeSize = function(ForceSize) {
     }
 }
 
-MC.AdminMenu.Copy = function(Text) {
+FARREL.AdminMenu.Copy = function(Text) {
     let TextArea = document.createElement('textarea');
     let Selection = document.getSelection();
     TextArea.textContent = Text;
@@ -106,13 +106,13 @@ MC.AdminMenu.Copy = function(Text) {
 
 $(document).on('click', '.menu-size-change', function(e) {
     e.preventDefault();
-    MC.AdminMenu.ChangeSize()
+    FARREL.AdminMenu.ChangeSize()
 });
 
 $(document).on('click', '.menu-current-target', function(e){
     $(this).parent().find('.ui-styles-input').each(function(Elem, Obj){
         if ($(this).find('input').data("PlayerId")) {
-            if (MC.AdminMenu.CurrentTarget != null) {
+            if (FARREL.AdminMenu.CurrentTarget != null) {
                 if ($('.admin-menu-item').find('.admin-menu-items-option-input').first().find('.ui-input-label').text() == 'Player') {
                     $(this).find('input').data("PlayerId", null)
                     $(this).find('input').val(" ");
@@ -124,7 +124,7 @@ $(document).on('click', '.menu-current-target', function(e){
         'max-height': 72.6+'vh',
     }, 100);
     $('.menu-current-target').fadeOut(150);
-    MC.AdminMenu.CurrentTarget = null;
+    FARREL.AdminMenu.CurrentTarget = null;
 });
 
 $(document).on('click', '.ui-styles-checkbox', function(){
@@ -141,7 +141,7 @@ $(document).on('click', '.ui-styles-checkbox', function(){
 // [ FUNCTIONS ] \\
 
 DebugMessage = function(Message) {
-    if (MC.AdminMenu.DebugEnabled) {
+    if (FARREL.AdminMenu.DebugEnabled) {
         console.log(`[DEBUG]: ${Message}`);
     }
 }
@@ -150,28 +150,28 @@ DebugMessage = function(Message) {
 
 document.addEventListener('DOMContentLoaded', (event) => {
     DebugMessage(`Menu Initialised`);
-    MC.AdminMenu.Action.SelectedCat = $('.menu-page-action-header-categories').find('.active');
+    FARREL.AdminMenu.Action.SelectedCat = $('.menu-page-action-header-categories').find('.active');
     window.addEventListener('message', function(event){
         let Action = event.data.Action;
         let Data = event.data
         switch(Action) {
             case "Open":
-                MC.AdminMenu.Open(Data);
+                FARREL.AdminMenu.Open(Data);
                 break;
             case "Close":
-                if (!MC.AdminMenu.Opened) return;
-                MC.AdminMenu.Close();
+                if (!FARREL.AdminMenu.Opened) return;
+                FARREL.AdminMenu.Close();
                 break;
             case "Update":
-                if (!MC.AdminMenu.Opened) return;
-                MC.AdminMenu.Update(Data);
+                if (!FARREL.AdminMenu.Opened) return;
+                FARREL.AdminMenu.Update(Data);
                 break;
             case "SetItemEnabled":
-                MC.AdminMenu.EnabledItems[Data.Name] = Data.State;
+                FARREL.AdminMenu.EnabledItems[Data.Name] = Data.State;
                 Data.State ? $(`#admin-option-${Data.Name}`).addClass('enabled') : $(`#admin-option-${Data.Name}`).removeClass('enabled');
                 break;
             case 'Copy':
-                MC.AdminMenu.Copy(Data.String);
+                FARREL.AdminMenu.Copy(Data.String);
                 break;
         }
     });
@@ -179,8 +179,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 $(document).on({
     keydown: function(e) {
-        if (e.key == 'Escape' && MC.AdminMenu.Opened) {
-            MC.AdminMenu.Close();
+        if (e.key == 'Escape' && FARREL.AdminMenu.Opened) {
+            FARREL.AdminMenu.Close();
         }
     },
 });

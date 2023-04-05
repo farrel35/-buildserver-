@@ -1,26 +1,24 @@
 LoggedIn, isAdmin = false, nil
  
 RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-	SetTimeout(1250, function()
-        RefreshMenu('All')
-        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
-            isAdmin = admin
-        end)
-        LoggedIn = true
+AddEventHandler('esx:playerLoaded', function()
+    RefreshMenu('All')
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
+        isAdmin = admin
     end)
+    LoggedIn = true
 end)
 
 RegisterCommand('gperm', function(source, args, RawCommand) 
     RefreshMenu('All')
-    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
 end, false)
 
 RegisterNetEvent('esx:onPlayerDeath')
-AddEventHandler('esx:onPlayerDeath', function(xPlayer)
-    ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
+AddEventHandler('esx:onPlayerDeath', function()
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
     LoggedIn = false
@@ -28,13 +26,11 @@ end)
 
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
-    SetTimeout(1250, function()
-        RefreshMenu('All')
-        ESX.TriggerServerCallback('mc-adminmenu/server/get-permission', function(admin)
-            isAdmin = admin
-        end)
-        LoggedIn = true
+    RefreshMenu('All')
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
+        isAdmin = admin
     end)
+    LoggedIn = true
 end)
 
 -- [ Code ] --
@@ -81,14 +77,13 @@ end)
 
 RegisterKeyMapping('adminmenu', _U('keymapping_desc'), 'keyboard', Config.Settings['DefaultOpenKeybind'])
 RegisterCommand('adminmenu', function(source, args, RawCommand) 
-    TriggerEvent('mc-admin/client/try-open-menu') 
+    TriggerEvent('farrel-adminmenu/client/try-open-menu') 
 end, false)
 
 -- [ Events ] --
 
-RegisterNetEvent('mc-admin/client/try-open-menu', function()
+RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
     if not isAdmin then return end
-    -- if KeyPress then if not CanBind() then return end end
 
     local Players = GetPlayers()
 
@@ -103,14 +98,14 @@ RegisterNetEvent('mc-admin/client/try-open-menu', function()
     })
 end)
 
-RegisterNetEvent('mc-admin/client/force-close', function()
+RegisterNetEvent('farrel-adminmenu/client/force-close', function()
     SetNuiFocus(false, false)
     SendNUIMessage({
         Action = 'Close',
     })
 end)
 
-RegisterNetEvent("mc-admin/client/reset-menu", function()
+RegisterNetEvent("farrel-adminmenu/client/reset-menu", function()
     if not isAdmin then return end
 
     ResetMenuKvp()
@@ -120,7 +115,7 @@ end)
 
 RegisterNUICallback('Admin/ToggleFavorite', function(Data, Cb)
     Config.FavoritedItems[Data.Id] = Data.Toggle
-    SetKvp("mc-adminmenu-favorites", json.encode(Config.FavoritedItems), "Favorites")
+    SetKvp("farrel-adminmenu-favorites", json.encode(Config.FavoritedItems), "Favorites")
     Cb('Ok')
 end)
 

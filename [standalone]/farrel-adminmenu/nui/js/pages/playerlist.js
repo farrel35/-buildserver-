@@ -1,19 +1,19 @@
 // [ PLAYER LIST ] \\
 
-MC.AdminMenu.LoadPlayerList = function() {
+FARREL.AdminMenu.LoadPlayerList = function() {
     DebugMessage('Loading PlayerList.');
-    if (MC.AdminMenu.Players != "" && MC.AdminMenu.Players != null) {
-        MC.AdminMenu.BuildPlayerList();
+    if (FARREL.AdminMenu.Players != "" && FARREL.AdminMenu.Players != null) {
+        FARREL.AdminMenu.BuildPlayerList();
     } else {
         DebugMessage('No players found.');
     }
 }
 
-MC.AdminMenu.BuildPlayerList = function() {
+FARREL.AdminMenu.BuildPlayerList = function() {
     DebugMessage('Building PlayerList.');
     $('.admin-menu-players').html('');
-    for (let i = 0; i < MC.AdminMenu.Players.length; i++) {
-        let Player = MC.AdminMenu.Players[i];
+    for (let i = 0; i < FARREL.AdminMenu.Players.length; i++) {
+        let Player = FARREL.AdminMenu.Players[i];
         let PlayerItem = `<div class="admin-menu-player" id="admin-player-${Player['ServerId']}">
                             <div class="admin-menu-player-id">(${Player['ServerId']})</div>
                             <div class="admin-menu-player-name">${Player['Name']}</div>

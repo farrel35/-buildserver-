@@ -1,17 +1,17 @@
 // [ SIDEBAR ] \\
 
-MC.AdminMenu.Sidebar.Selected = "Actions";
+FARREL.AdminMenu.Sidebar.Selected = "Actions";
 
-MC.AdminMenu.LoadCategory = function(Category) {
-    $('.menu-pages').find(`[data-Page="${MC.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
+FARREL.AdminMenu.LoadCategory = function(Category) {
+    $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
     if (Category == 'Actions') {
-        MC.AdminMenu.LoadItems();
+        FARREL.AdminMenu.LoadItems();
     } else if (Category == 'PlayerList') {
-        MC.AdminMenu.LoadPlayerList();
+        FARREL.AdminMenu.LoadPlayerList();
     }
 }
 
-MC.AdminMenu.SidebarAction = function(Action, Element) {
+FARREL.AdminMenu.SidebarAction = function(Action, Element) {
     if (Action == 'DevMode') {
         if ($(Element).hasClass('enabled')) {
             $(Element).removeClass('enabled')
@@ -25,7 +25,7 @@ MC.AdminMenu.SidebarAction = function(Action, Element) {
             }));
         }
     } else if (Action == 'ToggleMenu') {
-        MC.AdminMenu.Close();
+        FARREL.AdminMenu.Close();
     }
 }
 
@@ -36,26 +36,26 @@ $(document).on('click', ".menu-sidebar-action", function (e) {
 
     let NewSidebarCat = $(this);
     let OldSidebarCat = $(this).attr('data-Action');
-    if (MC.AdminMenu.Sidebar.Selected != OldSidebarCat && !Timeout) {
+    if (FARREL.AdminMenu.Sidebar.Selected != OldSidebarCat && !Timeout) {
         Timeout = true;
         setTimeout(() => {
             Timeout = false;
         }, 300);
         if (NewSidebarCat.hasClass('lower')) {
-            MC.AdminMenu.SidebarAction(OldSidebarCat, NewSidebarCat)
+            FARREL.AdminMenu.SidebarAction(OldSidebarCat, NewSidebarCat)
         } else {
-            let PreviousSidebarCat = $(`[data-Action="${MC.AdminMenu.Sidebar.Selected}"]`);
+            let PreviousSidebarCat = $(`[data-Action="${FARREL.AdminMenu.Sidebar.Selected}"]`);
 
-            MC.AdminMenu.LoadCategory(OldSidebarCat);
-            DebugMessage(`Changing Sidebar Category: ${MC.AdminMenu.Sidebar.Selected} -> ${OldSidebarCat}`)
+            FARREL.AdminMenu.LoadCategory(OldSidebarCat);
+            DebugMessage(`Changing Sidebar Category: ${FARREL.AdminMenu.Sidebar.Selected} -> ${OldSidebarCat}`)
             
             $(PreviousSidebarCat).removeClass('selected');
             $(NewSidebarCat).addClass('selected');
     
-            $(`[data-Page="${MC.AdminMenu.Sidebar.Selected}"`).fadeOut(150);
+            $(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeOut(150);
             $(`[data-Page="${OldSidebarCat}"`).fadeIn(150);
     
-            setTimeout(function(){ MC.AdminMenu.Sidebar.Selected = OldSidebarCat; }, 200);
+            setTimeout(function(){ FARREL.AdminMenu.Sidebar.Selected = OldSidebarCat; }, 200);
         }
     }
 });

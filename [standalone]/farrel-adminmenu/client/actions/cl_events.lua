@@ -1,13 +1,11 @@
 BlipsEnabled, NamesEnabled, GodmodeEnabled, AllPlayerBlips, BlipData = false, false, false, {}, {}
 
--- [ Code ] --
-
 -- [ Events ] --
 
 RegisterNetEvent("Admin:Godmode", function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/toggle-godmode', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/toggle-godmode', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Toggle:Noclip', function(Result)
@@ -62,7 +60,16 @@ RegisterNetEvent('Admin:Spawn:Vehicle', function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    TriggerEvent('QBCore:Command:SpawnVehicle', Result['model'])
+    -- TriggerEvent('QBCore:Command:SpawnVehicle', Result['model'])
+    ESX.Game.SpawnVehicle(Result['model'], GetEntityCoords(PlayerPedId()), 0, function(callback_vehicle)
+        SetVehRadioStation(callback_vehicle, "OFF")
+        SetVehicleFixed(callback_vehicle)
+        SetVehicleDeformationFixed(callback_vehicle)
+        SetVehicleUndriveable(callback_vehicle, false)
+        SetVehicleEngineOn(callback_vehicle, true, true)
+
+        TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
+    end)
 end)
 
 RegisterNetEvent('Admin:Teleport:Marker', function(Result)
@@ -91,13 +98,13 @@ RegisterNetEvent('Admin:Teleport', function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    TriggerServerEvent('mc-admin/server/teleport-player', Result['player'], Result['type'])
+    TriggerServerEvent('farrel-adminmenu/server/teleport-player', Result['player'], Result['type'])
 end)
 
 RegisterNetEvent("Admin:Chat:Say", function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/chat-say', Result['message'])
+    TriggerServerEvent('farrel-adminmenu/server/chat-say', Result['message'])
 end)
 
 RegisterNetEvent('Admin:Open:Clothing', function(Result)
@@ -106,19 +113,19 @@ RegisterNetEvent('Admin:Open:Clothing', function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    TriggerServerEvent('mc-admin/server/open-clothing', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/open-clothing', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Revive', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/revive-target', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/revive-target', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Remove:Stress', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/remove-stress', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/remove-stress', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Change:Model', function(Result)
@@ -127,7 +134,7 @@ RegisterNetEvent('Admin:Change:Model', function(Result)
     if Result['model'] ~= '' then
         local Model = GetHashKey(Result['model'])
         if IsModelValid(Model) then
-            TriggerServerEvent('mc-admin/server/set-model', Result['player'], Model)
+            TriggerServerEvent('farrel-adminmenu/server/set-model', Result['player'], Model)
         end
     end
 end)
@@ -135,26 +142,26 @@ end)
 RegisterNetEvent('Admin:Reset:Model', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/reset-skin', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/reset-skin', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Armor', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/set-armor', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/set-armor', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Food:Drink', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/set-food-drink', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/set-food-drink', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Request:Job', function(Result)
     if not isAdmin then return end
 
     if Result['job'] ~= '' then
-        TriggerServerEvent('mc-admin/server/request-job', Result['player'], Result['job'])
+        TriggerServerEvent('farrel-adminmenu/server/request-job', Result['player'], Result['job'])
     end
 end)
 
@@ -162,49 +169,49 @@ RegisterNetEvent("Admin:Drunk", function(Result)
     if not isAdmin then return end
 
 
-    TriggerServerEvent('mc-admin/server/drunk', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/drunk', Result['player'])
 end)
 
 RegisterNetEvent("Admin:Animal:Attack", function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/animal-attack', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/animal-attack', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Set:Fire', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/set-fire', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/set-fire', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Fling:Player', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/fling-player', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/fling-player', Result['player'])
 end)
 
 RegisterNetEvent('Admin:GiveItem', function(Result)
     if not isAdmin then return end
     
-    TriggerServerEvent('mc-admin/server/give-item', Result['player'], Result['item'], Result['amount'])
+    TriggerServerEvent('farrel-adminmenu/server/give-item', Result['player'], Result['item'], Result['amount'])
 end)
 
 RegisterNetEvent('Admin:Ban', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/ban-player', Result['player'], Result['expire'], Result['reason'])
+    TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['player'], Result['expire'], Result['reason'])
 end)
 
 RegisterNetEvent('Admin:Unban', function(Result)
      if not isAdmin then return end
 
-    TriggerServerEvent("mc-admin/server/unban-player", Result['player'])
+    TriggerServerEvent("farrel-adminmenu/server/unban-player", Result['player'])
 end)
 
 RegisterNetEvent('Admin:Kick', function(Result)
      if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/kick-player', Result['player'], Result['reason'])
+    TriggerServerEvent('farrel-adminmenu/server/kick-player', Result['player'], Result['reason'])
 end)
 
 RegisterNetEvent("Admin:Copy:Coords", function(Result)
@@ -253,7 +260,7 @@ end)
 RegisterNetEvent("Admin:Fart:Player", function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('mc-admin/server/play-sound', Result['player'], Result['fart'])
+    TriggerServerEvent('farrel-adminmenu/server/play-sound', Result['player'], Result['fart'])
 end)
 
 RegisterNetEvent('Admin:Toggle:PlayerBlips', function()
@@ -261,7 +268,7 @@ RegisterNetEvent('Admin:Toggle:PlayerBlips', function()
 
     BlipsEnabled = not BlipsEnabled
 
-    TriggerServerEvent('mc-admin/server/toggle-blips')
+    TriggerServerEvent('farrel-adminmenu/server/toggle-blips')
 
     SendNUIMessage({
         Action = "SetItemEnabled",
@@ -316,11 +323,11 @@ RegisterNetEvent('Admin:Toggle:Spectate', function(Result)
     if not isAdmin then return end
 
     if not isSpectateEnabled then
-        TriggerServerEvent('mc-admin/server/start-spectate', Result['player'])
+        TriggerServerEvent('farrel-adminmenu/server/start-spectate', Result['player'])
     else
         toggleSpectate(storedTargetPed)
         preparePlayerForSpec(false)
-        TriggerServerEvent('mc-admin/server/stop-spectate')
+        TriggerServerEvent('farrel-adminmenu/server/stop-spectate')
     end
 end)
 
@@ -330,12 +337,12 @@ RegisterNetEvent("Admin:OpenInv", function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", Result['player'])
+    -- TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", Result['player'])
 end)
 
 -- [ Triggered Events ] --
 
-RegisterNetEvent("mc-admin/client/toggle-godmode", function()
+RegisterNetEvent("farrel-adminmenu/client/toggle-godmode", function()
     GodmodeEnabled = not GodmodeEnabled
 
     local Msg = GodmodeEnabled and _U("enabled") or _U("disabled")
@@ -353,22 +360,24 @@ RegisterNetEvent("mc-admin/client/toggle-godmode", function()
     end
 end)
 
-RegisterNetEvent('mc-admin/client/teleport-player', function(Coords)
+RegisterNetEvent('farrel-adminmenu/client/teleport-player', function(Coords)
     local Entity = PlayerPedId()    
     SetPedCoordsKeepVehicle(Entity, Coords.x, Coords.y, Coords.z)
 end)
 
-RegisterNetEvent('mc-admin/client/set-model', function(Model)
-    Mercy.Functions.LoadModel(Model)
-    SetPlayerModel(PlayerId(), Model)
-    SetPedComponentVariation(PlayerPedId(), 0, 0, 0, 0)
+RegisterNetEvent('farrel-adminmenu/client/set-model', function(Model)
+    ESX.Streaming.RequestModel(Model, function()
+        SetPlayerModel(PlayerId(), Model)
+        SetPedRandomComponentVariation(PlayerPedId(), true)
+        SetModelAsNoLongerNeeded(Model)
+    end)
 end)
 
-RegisterNetEvent('mc-admin/client/armor-up', function()
+RegisterNetEvent('farrel-adminmenu/client/armor-up', function()
     SetPedArmour(PlayerPedId(), 100.0)
 end)
 
-RegisterNetEvent("mc-admin/client/play-sound", function(Sound)
+RegisterNetEvent("farrel-adminmenu/client/play-sound", function(Sound)
     local Soundfile = nil
     if Sound == 'Fart' then
         Soundfile = 'FartNoise2'
@@ -378,7 +387,7 @@ RegisterNetEvent("mc-admin/client/play-sound", function(Sound)
     TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 5, Soundfile, 0.3)
 end)
 
-RegisterNetEvent('mc-admin/client/fling-player', function()
+RegisterNetEvent('farrel-adminmenu/client/fling-player', function()
     local Ped = PlayerPedId()
     if GetVehiclePedIsUsing(Ped) ~= 0 then
         ApplyForceToEntity(GetVehiclePedIsUsing(Ped), 1, 0.0, 0.0, 100000.0, 1.0, 0.0, 0.0, 1, false, true, false, false)
@@ -387,27 +396,27 @@ RegisterNetEvent('mc-admin/client/fling-player', function()
     end
 end)
 
-RegisterNetEvent('mc-admin/client/DeletePlayerBlips', function()
+RegisterNetEvent('farrel-adminmenu/client/DeletePlayerBlips', function()
     if not isAdmin then return end
 
     DeletePlayerBlips()
 end)
 
-RegisterNetEvent('mc-admin/client/UpdatePlayerBlips', function(Data)
+RegisterNetEvent('farrel-adminmenu/client/UpdatePlayerBlips', function(Data)
     if not isAdmin then return end
 
     BlipData = Data
 end)
 
-RegisterNetEvent("mc-admin/client/drunk", function()
+RegisterNetEvent("farrel-adminmenu/client/drunk", function()
     drunkThread()
 end)
 
-RegisterNetEvent("mc-admin/client/animal-attack", function()
+RegisterNetEvent("farrel-adminmenu/client/animal-attack", function()
     startWildAttack()
 end)
 
-RegisterNetEvent("mc-admin/client/set-fire", function()
+RegisterNetEvent("farrel-adminmenu/client/set-fire", function()
     local playerPed = PlayerPedId()
     StartEntityFire(playerPed)
 end)

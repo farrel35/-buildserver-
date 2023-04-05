@@ -1,44 +1,44 @@
 // [ ACTIONS ] \\
 
-MC.AdminMenu.Action.SelectedCat = null;
-MC.AdminMenu.Action.Selected = "All";
+FARREL.AdminMenu.Action.SelectedCat = null;
+FARREL.AdminMenu.Action.Selected = "All";
 
-MC.AdminMenu.SwitchCategory = function(Button, Type) {
-    if (MC.AdminMenu.Action.Selected != Type) {
+FARREL.AdminMenu.SwitchCategory = function(Button, Type) {
+    if (FARREL.AdminMenu.Action.Selected != Type) {
         $('.menu-page-actions-search input').val('');
-        $(MC.AdminMenu.Action.SelectedCat).removeClass("active");
+        $(FARREL.AdminMenu.Action.SelectedCat).removeClass("active");
         $(Button).addClass("active");
-        MC.AdminMenu.Action.SelectedCat = Button
-        MC.AdminMenu.Action.Selected = Type
-        MC.AdminMenu.LoadItems();
+        FARREL.AdminMenu.Action.SelectedCat = Button
+        FARREL.AdminMenu.Action.Selected = Type
+        FARREL.AdminMenu.LoadItems();
         $('.admin-menu-items').find('.admin-menu-item-arrow').removeClass('closed');
         $('.admin-menu-items').find('.admin-menu-item-arrow').removeClass('open');
     }
 }
 
-MC.AdminMenu.LoadItems = async function() {
+FARREL.AdminMenu.LoadItems = async function() {
     $('.admin-menu-items').html('');
-    if (MC.AdminMenu.Action.Selected == 'All') {
-        $.each(MC.AdminMenu.Items, function(Key, Value) {
+    if (FARREL.AdminMenu.Action.Selected == 'All') {
+        $.each(FARREL.AdminMenu.Items, function(Key, Value) {
             $.each(Value.Items, function(KeyAdmin, ValueAdmin) {
-                MC.AdminMenu.BuildItems(ValueAdmin);
+                FARREL.AdminMenu.BuildItems(ValueAdmin);
             });
         });
     } else {
-        $.each(MC.AdminMenu.Items, function(Key, Value) {
-            if (Value.Name == MC.AdminMenu.Action.Selected) {
+        $.each(FARREL.AdminMenu.Items, function(Key, Value) {
+            if (Value.Name == FARREL.AdminMenu.Action.Selected) {
                 $.each(Value.Items, function(KeyAdmin, ValueAdmin) {
-                    MC.AdminMenu.BuildItems(ValueAdmin);
+                    FARREL.AdminMenu.BuildItems(ValueAdmin);
                 });
             }
         });
     }
 }
 
-MC.AdminMenu.ConvertPlayerList = () => {
+FARREL.AdminMenu.ConvertPlayerList = () => {
     let Options = [];
-    for (let i = 0; i < MC.AdminMenu.Players.length; i++) {
-        const Player = MC.AdminMenu.Players[i];
+    for (let i = 0; i < FARREL.AdminMenu.Players.length; i++) {
+        const Player = FARREL.AdminMenu.Players[i];
         Options.push({
             Icon: false,
             Text: `[${Player.ServerId}] ${Player.Name} (${Player.Steam})`,
@@ -48,7 +48,7 @@ MC.AdminMenu.ConvertPlayerList = () => {
     return Options;
 }
 
-MC.AdminMenu.BuildItems = function(Item) {
+FARREL.AdminMenu.BuildItems = function(Item) {
     let CollapseOptions = ``;
 
         if (Item.Options != undefined && Item.Options.length > 0) {
@@ -63,7 +63,7 @@ MC.AdminMenu.BuildItems = function(Item) {
                 </div>`;
 
                 if (Option.Type.toLowerCase() == 'input-choice' || Option.Type.toLowerCase() == 'text-choice') {
-                    if (Option.PlayerList) Option.Choices = MC.AdminMenu.ConvertPlayerList();
+                    if (Option.PlayerList) Option.Choices = FARREL.AdminMenu.ConvertPlayerList();
 
                     AdminOpenInputChoice = function(Element){
                         let Input = $(Element).find("input");
@@ -75,13 +75,13 @@ MC.AdminMenu.BuildItems = function(Item) {
                                 SelectedItem.Options[Choice].Choices[ChoiceId].Callback = () => {
                                     Input.val(SelectedItem.Options[Choice].Choices[ChoiceId].Text);
                                     if (SelectedItem.Options[Choice].Choices[ChoiceId].Source) {
-                                        MC.AdminMenu.CurrentTarget = SelectedItem.Options[Choice].Choices[ChoiceId]
-                                        if (MC.AdminMenu.CurrentTarget != null) {
+                                        FARREL.AdminMenu.CurrentTarget = SelectedItem.Options[Choice].Choices[ChoiceId]
+                                        if (FARREL.AdminMenu.CurrentTarget != null) {
                                             $('.admin-menu-items').animate({
                                                 'max-height': 70+'vh',
                                             }, 100);
                                             $('.menu-current-target').fadeIn(150);
-                                            $('.menu-current-target').html(`Current Target: ${MC.AdminMenu.CurrentTarget.Text}`)
+                                            $('.menu-current-target').html(`Current Target: ${FARREL.AdminMenu.CurrentTarget.Text}`)
                                         } else {
                                             $('.menu-current-target').fadeOut(150);
                                         }
@@ -95,10 +95,10 @@ MC.AdminMenu.BuildItems = function(Item) {
                         };
                         
                         if (SelectedItem.Options[Choice].Type.toLowerCase() == 'text-choice') {
-                            MC.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, false)
+                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, false)
                             Input.focus();
                         } else {
-                            MC.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, true)
+                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, true)
                         }
                     };
 
@@ -112,14 +112,14 @@ MC.AdminMenu.BuildItems = function(Item) {
         CollapseOptions += `<div class="admin-menu-execute ui-styles-button default">${Item.Name}</div></div>`
     }
 
-    let AdminOption = `<div class="admin-menu-item ${MC.AdminMenu.EnabledItems[Item['Id']] ? 'enabled' : ''}" id="admin-option-${Item['Id']}">
-        <div class="admin-menu-item-favorited ${MC.AdminMenu.FavoritedItems[Item['Id']] ? 'favorited' : ''}"><i class="${MC.AdminMenu.FavoritedItems[Item['Id']] ? 'fa-solid' : 'fa-regular'} fa-star"></i></div>
+    let AdminOption = `<div class="admin-menu-item ${FARREL.AdminMenu.EnabledItems[Item['Id']] ? 'enabled' : ''}" id="admin-option-${Item['Id']}">
+        <div class="admin-menu-item-favorited ${FARREL.AdminMenu.FavoritedItems[Item['Id']] ? 'favorited' : ''}"><i class="${FARREL.AdminMenu.FavoritedItems[Item['Id']] ? 'fa-solid' : 'fa-regular'} fa-star"></i></div>
         <div class="admin-menu-item-arrow">${CollapseOptions != "" ? `<i class="fa-solid fa-chevron-down">` : ""}</i></div>
         <div class="admin-menu-item-name">${Item.Name}</div>
         ${CollapseOptions}
     </div>`;
 
-    if (MC.AdminMenu.FavoritedItems[Item['Id']]) {
+    if (FARREL.AdminMenu.FavoritedItems[Item['Id']]) {
         $('.admin-menu-items').prepend(AdminOption);
     } else {
         $('.admin-menu-items').append(AdminOption);
@@ -129,16 +129,16 @@ MC.AdminMenu.BuildItems = function(Item) {
 
 // Dropdown
 
-MC.AdminMenu.ClearDropdown = function() {
+FARREL.AdminMenu.ClearDropdown = function() {
     if ($('.ui-styles-dropdown').length != 0) {
         $('.ui-styles-dropdown').remove();
     }
 };
 
-MC.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
+FARREL.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
     if (Options.length == 0) return;
 
-    MC.AdminMenu.IsGeneratingDropdown = true;
+    FARREL.AdminMenu.IsGeneratingDropdown = true;
 
     $('.ui-styles-dropdown').remove();
     let DropdownDOM = ``;
@@ -177,7 +177,7 @@ MC.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
     })
 
     setTimeout(() => {
-        MC.AdminMenu.IsGeneratingDropdown = false;
+        FARREL.AdminMenu.IsGeneratingDropdown = false;
     }, 250);
 };
 
@@ -215,7 +215,7 @@ $(document).on('input', '.ui-styles-dropdown-search input', function(e){
 $(document).on('click', '.menu-page-action-header-category', function(e) {
     e.preventDefault();
     let Type = $(this).attr('data-Type');
-    MC.AdminMenu.SwitchCategory($(this), Type)
+    FARREL.AdminMenu.SwitchCategory($(this), Type)
 });
 
 $(document).on('click', '.admin-menu-item', function(e) {
@@ -240,10 +240,10 @@ $(document).on('click', '.admin-menu-item', function(e) {
             $(this).find('.admin-menu-item-arrow').removeClass('closed');
             $(this).find('.admin-menu-item-arrow').addClass('open');
             
-            if (MC.AdminMenu.CurrentTarget != null) {
+            if (FARREL.AdminMenu.CurrentTarget != null) {
                 if ($(this).find('.admin-menu-items-option-input').first().find('.ui-input-label').text() == 'Player') {
-                    $(this).find('.admin-menu-items-option-input input').first().data("PlayerId", MC.AdminMenu.CurrentTarget.Source)
-                    $(this).find('.admin-menu-items-option-input input').first().val(MC.AdminMenu.CurrentTarget.Text);
+                    $(this).find('.admin-menu-items-option-input input').first().data("PlayerId", FARREL.AdminMenu.CurrentTarget.Source)
+                    $(this).find('.admin-menu-items-option-input input').first().val(FARREL.AdminMenu.CurrentTarget.Text);
                 }
             }
         }
@@ -286,6 +286,6 @@ $(document).on('click', '.admin-menu-execute', function(e){
 });
 
 $(document).on('click', 'body', function(e){
-    if (MC.AdminMenu.IsGeneratingDropdown) return;
+    if (FARREL.AdminMenu.IsGeneratingDropdown) return;
     if ($('.ui-styles-dropdown').length != 0 && $('.ui-styles-dropdown-search:hover').length == 0) $('.ui-styles-dropdown').remove();
 });

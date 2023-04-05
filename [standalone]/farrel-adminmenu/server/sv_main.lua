@@ -1,12 +1,12 @@
 
 SpectateData = {}
 
-ESX.RegisterServerCallback('mc-adminmenu/server/get-permission', function(source, Cb)
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-permission', function(source, Cb)
     local admin = IsPlayerAdmin(source)
     Cb(admin)
 end)
 
-ESX.RegisterServerCallback('mc-admin/server/get-active-players-in-radius', function(Source, Cb, Coords, Radius)
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-active-players-in-radius', function(Source, Cb, Coords, Radius)
 	local Coords, Radius = Coords ~= nil and vector3(Coords.x, Coords.y, Coords.z) or GetEntityCoords(GetPlayerPed(Source)), Radius ~= nil and Radius or 5.0
     local ActivePlayers = {}
 	for k, v in pairs(ESX.GetPlayers()) do
@@ -23,7 +23,7 @@ ESX.RegisterServerCallback('mc-admin/server/get-active-players-in-radius', funct
 end)
 
 
-ESX.RegisterServerCallback('mc-admin/server/get-players', function(source, Cb)
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-players', function(source, Cb)
     local PlayerList = {}
     for k, v in pairs(ESX.GetPlayers()) do
         PlayerList[#PlayerList + 1] = {
@@ -36,7 +36,7 @@ ESX.RegisterServerCallback('mc-admin/server/get-players', function(source, Cb)
     Cb(PlayerList)
 end)
 
-RegisterNetEvent("mc-admin/server/ban-player", function(ServerId, Expires, Reason)
+RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expires, Reason)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -74,7 +74,7 @@ RegisterNetEvent("mc-admin/server/ban-player", function(ServerId, Expires, Reaso
     end
 end)
 
-RegisterNetEvent("mc-admin/server/kick-player", function(ServerId, Reason)
+RegisterNetEvent("farrel-adminmenu/server/kick-player", function(ServerId, Reason)
     local src = source
     if not IsPlayerAdmin(src) then return end
     
@@ -82,16 +82,16 @@ RegisterNetEvent("mc-admin/server/kick-player", function(ServerId, Reason)
     TriggerClientEvent('esx:showNotification', src, _U('kicked'), 'success')
 end)
 
-RegisterNetEvent("mc-admin/server/give-item", function(ServerId, ItemName, ItemAmount)
+RegisterNetEvent("farrel-adminmenu/server/give-item", function(ServerId, ItemName, ItemAmount)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
-    xPlayer.addInventoryItem(ItemName, ItemAmount, 'Admin-Menu-Give')
+    xPlayer.addInventoryItem(ItemName, ItemAmount)
     TriggerClientEvent('esx:showNotification', src, _U('gaveitem', ItemAmount, ItemName), 'success')
 end)
 
-RegisterNetEvent("mc-admin/server/request-job", function(ServerId, JobName)
+RegisterNetEvent("farrel-adminmenu/server/request-job", function(ServerId, JobName)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -100,7 +100,7 @@ RegisterNetEvent("mc-admin/server/request-job", function(ServerId, JobName)
     TriggerClientEvent('esx:showNotification', src, _U('setjob', JobName), 'success')
 end)
 
-RegisterNetEvent('mc-admin/server/start-spectate', function(ServerId)
+RegisterNetEvent('farrel-adminmenu/server/start-spectate', function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -123,7 +123,7 @@ RegisterNetEvent('mc-admin/server/start-spectate', function(ServerId)
     TriggerClientEvent('Mercy/client/specPlayer', src, ServerId, tgtCoords)
 end)
 
-RegisterNetEvent('mc-admin/server/stop-spectate', function()
+RegisterNetEvent('farrel-adminmenu/server/stop-spectate', function()
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -133,44 +133,44 @@ RegisterNetEvent('mc-admin/server/stop-spectate', function()
     end
 end)
 
-RegisterNetEvent("mc-admin/server/drunk", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/drunk", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/drunk', ServerId)
+    TriggerClientEvent('farrel-adminmenu/client/drunk', ServerId)
 end)
 
-RegisterNetEvent("mc-admin/server/animal-attack", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/animal-attack", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/animal-attack', ServerId)
+    TriggerClientEvent('farrel-adminmenu/client/animal-attack', ServerId)
 end)
 
-RegisterNetEvent("mc-admin/server/set-fire", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/set-fire", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/set-fire', ServerId)
+    TriggerClientEvent('farrel-adminmenu/client/set-fire', ServerId)
 end)
 
-RegisterNetEvent("mc-admin/server/fling-player", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/fling-player", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/fling-player', ServerId)
+    TriggerClientEvent('farrel-adminmenu/client/fling-player', ServerId)
 end)
 
-RegisterNetEvent("mc-admin/server/play-sound", function(ServerId, SoundId)
+RegisterNetEvent("farrel-adminmenu/server/play-sound", function(ServerId, SoundId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/play-sound', ServerId, SoundId)
+    TriggerClientEvent('farrel-adminmenu/client/play-sound', ServerId, SoundId)
 end)
 
 -- Utility Actions
 
-RegisterNetEvent("mc-admin/server/toggle-blips", function()
+RegisterNetEvent("farrel-adminmenu/server/toggle-blips", function()
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -182,11 +182,11 @@ RegisterNetEvent("mc-admin/server/toggle-blips", function()
             Coords = GetEntityCoords(GetPlayerPed(v)),
         }
     end
-    TriggerClientEvent('mc-admin/client/UpdatePlayerBlips', src, BlipData)
+    TriggerClientEvent('farrel-adminmenu/client/UpdatePlayerBlips', src, BlipData)
 end)
 
 
-RegisterNetEvent("mc-admin/server/teleport-player", function(ServerId, Type)
+RegisterNetEvent("farrel-adminmenu/server/teleport-player", function(ServerId, Type)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -194,16 +194,16 @@ RegisterNetEvent("mc-admin/server/teleport-player", function(ServerId, Type)
     if Type == 'Goto' then
         Msg = _U('teleportedto') 
         local TCoords = GetEntityCoords(GetPlayerPed(ServerId))
-        TriggerClientEvent('mc-admin/client/teleport-player', src, TCoords)
+        TriggerClientEvent('farrel-adminmenu/client/teleport-player', src, TCoords)
     elseif Type == 'Bring' then
         Msg = _U('teleportedbrought')
         local Coords = GetEntityCoords(GetPlayerPed(src))
-        TriggerClientEvent('mc-admin/client/teleport-player', ServerId, Coords)
+        TriggerClientEvent('farrel-adminmenu/client/teleport-player', ServerId, Coords)
     end
     TriggerClientEvent('esx:showNotification', src, _U('teleported', {tpmsg = Msg}), 'success')
 end)
 
-RegisterNetEvent("mc-admin/server/chat-say", function(Message)
+RegisterNetEvent("farrel-adminmenu/server/chat-say", function(Message)
     TriggerClientEvent('chat:addMessage', -1, {
         template = "<div class=chat-message server'><strong>".._U('announcement').." | </strong> {0}</div>",
         args = {Message}
@@ -212,11 +212,11 @@ end)
 
 -- Player Actions
 
-RegisterNetEvent("mc-admin/server/toggle-godmode", function(ServerId)
-    TriggerClientEvent('mc-admin/client/toggle-godmode', ServerId)
+RegisterNetEvent("farrel-adminmenu/server/toggle-godmode", function(ServerId)
+    TriggerClientEvent('farrel-adminmenu/client/toggle-godmode', ServerId)
 end)
 
-RegisterNetEvent("mc-admin/server/set-food-drink", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/set-food-drink", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -230,7 +230,7 @@ RegisterNetEvent("mc-admin/server/set-food-drink", function(ServerId)
     end
 end)
 
-RegisterNetEvent("mc-admin/server/remove-stress", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/remove-stress", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -243,7 +243,7 @@ RegisterNetEvent("mc-admin/server/remove-stress", function(ServerId)
     end
 end)
 
-RegisterNetEvent("mc-admin/server/set-armor", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/set-armor", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -254,12 +254,12 @@ RegisterNetEvent("mc-admin/server/set-armor", function(ServerId)
     end
 end)
 
-RegisterNetEvent("mc-admin/server/reset-skin", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/reset-skin", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
-    local ClothingData = MySQL.Sync.fetchAll('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { xPlayer.identifier, 1 })
+    local ClothingData = MySQL.Sync.fetchAll('SELECT skin FROM playerskins WHERE citizenid = ? AND active = ?', { xPlayer.identifier, 1 })
     if ClothingData[1] ~= nil then
         TriggerClientEvent("qb-clothes:loadSkin", ServerId, false, ClothingData[1].model, ClothingData[1].skin)
     else
@@ -267,14 +267,14 @@ RegisterNetEvent("mc-admin/server/reset-skin", function(ServerId)
     end
 end)
 
-RegisterNetEvent("mc-admin/server/set-model", function(ServerId, Model)
+RegisterNetEvent("farrel-adminmenu/server/set-model", function(ServerId, Model)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('mc-admin/client/set-model', ServerId, Model)
+    TriggerClientEvent('farrel-adminmenu/client/set-model', ServerId, Model)
 end)
 
-RegisterNetEvent("mc-admin/server/revive-in-distance", function()
+RegisterNetEvent("farrel-adminmenu/server/revive-in-distance", function()
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -291,7 +291,7 @@ RegisterNetEvent("mc-admin/server/revive-in-distance", function()
 	end
 end)
 
-RegisterNetEvent("mc-admin/server/revive-target", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/revive-target", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
@@ -299,7 +299,7 @@ RegisterNetEvent("mc-admin/server/revive-target", function(ServerId)
     TriggerClientEvent('esx:showNotification', src, _U('revived'), 'success')
 end)
 
-RegisterNetEvent("mc-admin/server/open-clothing", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/open-clothing", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
