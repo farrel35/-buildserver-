@@ -307,3 +307,26 @@ RegisterNetEvent("farrel-adminmenu/server/open-clothing", function(ServerId)
     TriggerClientEvent('esx:showNotification', src, _U('gave_clothing'), 'success')
 end)
 
+RegisterNetEvent('farrel-adminmenu/server/give-vehicle', function(Steamhex, Model, Plate, Type)
+    local src = source
+    
+    if not IsPlayerAdmin(src) then return end
+    
+    if Type == "Online" then
+        local xPlayer = ESX.GetPlayerFromId(src)
+        local tPlayer = ESX.GetPlayerFromId(Steamhex)
+
+        MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {tPlayer.identifier, Plate, json.encode({model = joaat(Model), plate = Plate}), true
+        }, function(rowsChanged)
+            xPlayer.showNotification("Berhasil give kendaraan ke " .. GetPlayerName(Steamhex) .. " dengan plat " .. Plate)
+            tPlayer.showNotification("Menerima kendaraan dari admin dengan plat " .. Plate)
+        end)
+    else
+        local xPlayer = ESX.GetPlayerFromId(src)
+
+        MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {Steamhex, Plate, json.encode({model = joaat(Model), plate = Plate}), true
+        }, function(rowsChanged)
+            xPlayer.showNotification("Berhasil give kendaraan")
+        end)
+    end
+end)

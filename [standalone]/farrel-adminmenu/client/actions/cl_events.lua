@@ -340,6 +340,34 @@ RegisterNetEvent("Admin:OpenInv", function(Result)
     -- TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", Result['player'])
 end)
 
+RegisterNetEvent("Admin:GiveVehicle", function(Result)
+    if not isAdmin then return end
+    
+    SendNUIMessage({
+        Action = 'Close',
+    })
+    
+    if  Result['plate'] == nil or  Result['plate'] == "" then
+        Result['plate'] = exports['esx_vehicleshop']:GeneratePlate()
+    end
+
+    TriggerServerEvent("farrel-adminmenu/server/give-vehicle", Result['player'], Result['model'], Result['plate'], "Online")
+end)
+
+RegisterNetEvent("Admin:GiveVehicleOffline", function(Result)
+    if not isAdmin then return end
+    
+    SendNUIMessage({
+        Action = 'Close',
+    })
+
+    if  Result['plate'] == nil or  Result['plate'] == "" then
+        Result['plate'] = exports['esx_vehicleshop']:GeneratePlate()
+    end
+
+   TriggerServerEvent("farrel-adminmenu/server/give-vehicle", Result['steamhex'], Result['model'], Result['plate'], "Offline")
+end)
+
 -- [ Triggered Events ] --
 
 RegisterNetEvent("farrel-adminmenu/client/toggle-godmode", function()

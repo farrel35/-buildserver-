@@ -561,6 +561,58 @@ Config.AdminMenus = {
                     },
                 }
             },
+            {
+                ['Id'] = 'givevehicle',
+                ['Name'] = 'Give Vehicle',
+                ['Event'] = 'Admin:GiveVehicle',
+                ['Collapse'] = true,
+                ['Options'] = {
+                    {
+                        ['Id'] = 'player',
+                        ['Name'] = 'Player',
+                        ['Type'] = 'input-choice',
+                        ['PlayerList'] = true,
+                    },
+                    {
+                        ['Id'] = 'model',
+                        ['Name'] = 'Model',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                    {
+                        ['Id'] = 'plate',
+                        ['Name'] = 'Plate(kosong = random)',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                }
+            },
+            {
+                ['Id'] = 'givevehicleoff',
+                ['Name'] = 'Give Vehicle Offline',
+                ['Event'] = 'Admin:GiveVehicleOffline',
+                ['Collapse'] = true,
+                ['Options'] = {
+                    {
+                        ['Id'] = 'steamhex',
+                        ['Name'] = 'Steam Hex',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                    {
+                        ['Id'] = 'model',
+                        ['Name'] = 'Model',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                    {
+                        ['Id'] = 'plate',
+                        ['Name'] = 'Plate(kosong = random)',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                }
+            },
         }
     },
 }
