@@ -103,11 +103,11 @@ function ESX.CreateMenu(menu)
     print("[^1ERROR^7] ^5ESX TextUI^7 is Missing!")
 end
 
-function ESX.ShowUI(msg)
+function ESX.showTextUI(msg)
     return lib.showTextUI(msg)
 end
 
-function ESX.HideUI()
+function ESX.hideTextUI()
     return lib.hideTextUI()
 end
 
