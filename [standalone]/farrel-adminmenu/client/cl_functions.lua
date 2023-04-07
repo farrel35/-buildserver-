@@ -24,10 +24,12 @@ function ToggleDevMode(Bool)
 end
 
 function UpdateMenu()
+    local Bans = GetBans()
     local Players = GetPlayers()
     SendNUIMessage({
         Action = 'Update',
         Debug = Config.Settings['Debug'],
+        Bans = Bans,
         AllPlayers = Players,
         AdminItems = Config.AdminMenus,
         Favorited = Config.FavoritedItems,
@@ -133,6 +135,14 @@ function GetPlayersInArea(Coords, Radius)
 	return Citizen.Await(Prom)
 end
 
+
+function GetBans()
+    local Prom = promise:new()
+    ESX.TriggerServerCallback("farrel-adminmenu/server/get-bans", function(Bans)
+        Prom:resolve(Bans)
+    end)
+    return Citizen.Await(Prom)
+end
 
 function GetPlayers()
     local Prom = promise:new()

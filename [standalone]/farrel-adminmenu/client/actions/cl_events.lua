@@ -142,7 +142,7 @@ end)
 RegisterNetEvent('Admin:Reset:Model', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('farrel-adminmenu/server/reset-skin', Result['player'])
+    TriggerServerEvent('farrel-adminmenu/server/reset-model', Result['player'])
 end)
 
 RegisterNetEvent('Admin:Armor', function(Result)
@@ -200,6 +200,12 @@ RegisterNetEvent('Admin:Ban', function(Result)
     if not isAdmin then return end
 
     TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['player'], Result['expire'], Result['reason'])
+end)
+
+RegisterNetEvent('Admin:Unban', function(Result)
+    if not isAdmin then return end
+    
+   TriggerServerEvent("farrel-adminmenu/server/unban-player", Result['player'])
 end)
 
 RegisterNetEvent('Admin:Kick', function(Result)
@@ -392,6 +398,25 @@ RegisterNetEvent('farrel-adminmenu/client/set-model', function(Model)
         SetPlayerModel(PlayerId(), Model)
         SetPedRandomComponentVariation(PlayerPedId(), true)
         SetModelAsNoLongerNeeded(Model)
+    end)
+end)
+
+RegisterNetEvent('farrel-adminmenu/client/reset-model', function()
+    ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+        local characterModel
+
+        if skin['sex'] == 0 then
+            characterModel = `mp_m_freemode_01`
+        else
+            characterModel = `mp_f_freemode_01`
+        end
+
+        ESX.Streaming.RequestModel(characterModel, function()
+            SetPlayerModel(PlayerId(), characterModel)
+            SetPedRandomComponentVariation(PlayerPedId(), true)
+            SetModelAsNoLongerNeeded(characterModel)
+        end)
+        TriggerEvent('skinchanger:loadSkin', skin) 
     end)
 end)
 

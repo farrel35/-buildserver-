@@ -13,6 +13,7 @@ FARREL.AdminMenu.IsGeneratingDropdown = false;
 
 FARREL.AdminMenu.FavoritedItems = {};
 FARREL.AdminMenu.EnabledItems = {};
+FARREL.AdminMenu.Bans = [];
 
 FARREL.AdminMenu.Players = null;
 FARREL.AdminMenu.Items = null;
@@ -31,6 +32,7 @@ FARREL.AdminMenu.Update = function(Data) {
     FARREL.AdminMenu.FavoritedItems = Data.Favorited;
     FARREL.AdminMenu.Players = Data.AllPlayers;
     FARREL.AdminMenu.Items = Data.AdminItems;
+    FARREL.AdminMenu.Bans = Data.Bans;
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
         FARREL.AdminMenu.LoadItems();
     } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerList') {
@@ -41,6 +43,7 @@ FARREL.AdminMenu.Update = function(Data) {
 FARREL.AdminMenu.Open = function(Data) {
     FARREL.AdminMenu.DebugEnabled = Data.Debug;
     FARREL.AdminMenu.FavoritedItems = Data.Favorited;
+    FARREL.AdminMenu.Bans = Data.Bans;
     DebugMessage(`Menu Opening`);
     $('.menu-main-container').css('pointer-events', 'auto');
     $('.menu-main-container').fadeIn(450, function() {

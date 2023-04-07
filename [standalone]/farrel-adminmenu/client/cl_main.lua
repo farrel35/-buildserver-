@@ -85,6 +85,7 @@ end, false)
 RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
     if not isAdmin then return end
 
+    local Bans = GetBans()
     local Players = GetPlayers()
 
     SetCursorLocation(0.87, 0.15)
@@ -92,6 +93,7 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
     SendNUIMessage({
         Action = 'Open',
         Debug = Config.Settings['Debug'],
+        Bans = Bans,
         AllPlayers = Players,
         AdminItems = Config.AdminMenus,
         Favorited = Config.FavoritedItems,

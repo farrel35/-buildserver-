@@ -46,6 +46,25 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-active-players-in-radius
 	Cb(ActivePlayers)
 end)
 
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-bans', function(source, Cb)
+    local BanList = {}
+    local BansData = MySQL.Sync.fetchAll('SELECT * FROM bans', {})
+    if BansData and BansData[1] ~= nil then
+        for k, v in pairs(BansData) do
+                BanList[#BanList + 1] = {
+                    Text = v.banid .. " - " .. v.identifier .. " - " .. v.name,
+                    BanId = v.banid,
+                    Name = v.name,
+                    Reason = v.reason,
+                    Expires = os.date('*t', tonumber(v.expire)),
+                    BannedOn = os.date('*t', tonumber(v.bannedon)),
+                    BannedOnN = v.bannedon,
+                    BannedBy = v.bannedby,
+                }
+        end
+    end
+    Cb(BanList)
+end)
 
 ESX.RegisterServerCallback('farrel-adminmenu/server/get-players', function(source, Cb)
     local PlayerList = {}
@@ -92,6 +111,19 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
         else
             DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
         end
+    end
+end)
+
+RegisterNetEvent("farrel-adminmenu/server/unban-player", function(BanId)
+    local src = source
+    if not IsPlayerAdmin(src) then return end
+
+    local BanData = MySQL.query.await('SELECT * FROM bans WHERE banid = ?', {BanId})
+    if BanData and BanData[1] ~= nil then
+        MySQL.query('DELETE FROM bans WHERE banid = ?', {BanId})
+        TriggerClientEvent('esx:showNotification', src, _U('unbanned'), 'success')
+    else
+        TriggerClientEvent('esx:showNotification', src, _U('not_banned'), 'error')
     end
 end)
 
@@ -275,17 +307,12 @@ RegisterNetEvent("farrel-adminmenu/server/set-armor", function(ServerId)
     end
 end)
 
-RegisterNetEvent("farrel-adminmenu/server/reset-skin", function(ServerId)
+RegisterNetEvent("farrel-adminmenu/server/reset-model", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
-    local ClothingData = MySQL.Sync.fetchAll('SELECT skin FROM playerskins WHERE citizenid = ? AND active = ?', { xPlayer.identifier, 1 })
-    if ClothingData[1] ~= nil then
-        TriggerClientEvent("qb-clothes:loadSkin", ServerId, false, ClothingData[1].model, ClothingData[1].skin)
-    else
-        TriggerClientEvent("qb-clothes:loadSkin", ServerId, true)
-    end
+    TriggerClientEvent("farrel-adminmenu/client/reset-model", ServerId)
 end)
 
 RegisterNetEvent("farrel-adminmenu/server/set-model", function(ServerId, Model)

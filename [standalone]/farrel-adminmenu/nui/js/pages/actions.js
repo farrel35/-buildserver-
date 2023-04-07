@@ -64,7 +64,7 @@ FARREL.AdminMenu.BuildItems = function(Item) {
 
                 if (Option.Type.toLowerCase() == 'input-choice' || Option.Type.toLowerCase() == 'text-choice') {
                     if (Option.PlayerList) Option.Choices = FARREL.AdminMenu.ConvertPlayerList();
-
+                    if (Item.Id == 'unbanPlayer') Option.Choices = FARREL.AdminMenu.Bans;
                     AdminOpenInputChoice = function(Element){
                         let Input = $(Element).find("input");
                         let SelectedItem = JSON.parse($(Element).attr("Item"));
