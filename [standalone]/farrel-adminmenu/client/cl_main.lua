@@ -14,6 +14,7 @@ RegisterCommand('gperm', function(source, args, RawCommand)
     ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
+    LoggedIn = true
 end, false)
 
 RegisterNetEvent('esx:onPlayerDeath')
@@ -47,11 +48,13 @@ CreateThread(function()
                     local ServerId = GetPlayerServerId(PlayerId())
                     for k, v in pairs(BlipData) do
                         if tonumber(v.ServerId) ~= tonumber(ServerId) then
-                            local PlayerPed = GetPlayerPed(GetPlayerFromServerId(v.ServerId))
+                            local PlayerPed = GetPlayerPed(GetPlayerFromServerId(tonumber(v.ServerId)))
                             local PlayerBlip = AddBlipForEntity(PlayerPed) 
                             SetBlipSprite(PlayerBlip, 1)
                             SetBlipColour(PlayerBlip, 0)
                             SetBlipScale(PlayerBlip, 0.75)
+                            ShowHeadingIndicatorOnBlip(PlayerBlip, true) -- Player Blip indicator
+                            SetBlipRotation(PlayerBlip, math.ceil(GetEntityHeading(ped))) -- update rotation
                             SetBlipAsShortRange(PlayerBlip, true)
                             BeginTextCommandSetBlipName("STRING")
                             AddTextComponentString('['..v.ServerId..'] '..v.Name)
@@ -77,6 +80,10 @@ end)
 
 RegisterKeyMapping('adminmenu', _U('keymapping_desc'), 'keyboard', Config.Settings['DefaultOpenKeybind'])
 RegisterCommand('adminmenu', function(source, args, RawCommand) 
+    RefreshMenu('All')
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
+        isAdmin = admin
+    end)
     TriggerEvent('farrel-adminmenu/client/try-open-menu') 
 end, false)
 
@@ -138,6 +145,8 @@ RegisterNUICallback('Admin/TriggerAction', function(Data, Cb)
         if Data.Event ~= nil and Data.EventType ~= nil then
             if Data.EventType == 'Client' then
                 TriggerEvent(Data.Event, Data.Result)
+            elseif Data.EventType == 'Command' then
+                ExecuteCommand(Data.Event .. " " .. Data.Result.player)
             else
                 TriggerServerEvent(Data.Event, Data.Result)
             end

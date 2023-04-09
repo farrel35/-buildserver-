@@ -105,6 +105,7 @@ function GetInventoryItems()
     for k, v in pairs(exports.ox_inventory:Items()) do
         Inventory[#Inventory + 1] = {
             Text = k,
+            Label = ' ['..v.label..']'
         }
         table.sort(Inventory, function(a, b)
              return a.Text > b.Text
@@ -247,4 +248,91 @@ function startWildAttack()
     TaskPutPedDirectlyIntoMelee(animalPed, playerPed, 0.0, -1.0, 0.0, 0)
     SetRelationshipBetweenGroups(5, animalGroupHash, playerGroupHash)
     SetRelationshipBetweenGroups(5, playerGroupHash, animalGroupHash)
+end
+
+function cloneModel(pedId)
+    local ped = GetPlayerPed(GetPlayerFromServerId(pedId))
+    local me = PlayerPedId()
+
+    hat = GetPedPropIndex(ped, 0)
+    hat_texture = GetPedPropTextureIndex(ped, 0)
+
+    glasses = GetPedPropIndex(ped, 1)
+    glasses_texture = GetPedPropTextureIndex(ped, 1)
+
+    ear = GetPedPropIndex(ped, 2)
+    ear_texture = GetPedPropTextureIndex(ped, 2)
+
+    watch = GetPedPropIndex(ped, 6)
+    watch_texture = GetPedPropTextureIndex(ped, 6)
+
+    wrist = GetPedPropIndex(ped, 7)
+    wrist_texture = GetPedPropTextureIndex(ped, 7)
+
+    head_drawable = GetPedDrawableVariation(ped, 0)
+    head_palette = GetPedPaletteVariation(ped, 0)
+    head_texture = GetPedTextureVariation(ped, 0)
+
+    beard_drawable = GetPedDrawableVariation(ped, 1)
+    beard_palette = GetPedPaletteVariation(ped, 1)
+    beard_texture = GetPedTextureVariation(ped, 1)
+
+    hair_drawable = GetPedDrawableVariation(ped, 2)
+    hair_palette = GetPedPaletteVariation(ped, 2)
+    hair_texture = GetPedTextureVariation(ped, 2)
+
+    torso_drawable = GetPedDrawableVariation(ped, 3)
+    torso_palette = GetPedPaletteVariation(ped, 3)
+    torso_texture = GetPedTextureVariation(ped, 3)
+
+    legs_drawable = GetPedDrawableVariation(ped, 4)
+    legs_palette = GetPedPaletteVariation(ped, 4)
+    legs_texture = GetPedTextureVariation(ped, 4)
+
+    hands_drawable = GetPedDrawableVariation(ped, 5)
+    hands_palette = GetPedPaletteVariation(ped, 5)
+    hands_texture = GetPedTextureVariation(ped, 5)
+
+    foot_drawable = GetPedDrawableVariation(ped, 6)
+    foot_palette = GetPedPaletteVariation(ped, 6)
+    foot_texture = GetPedTextureVariation(ped, 6)
+
+    acc1_drawable = GetPedDrawableVariation(ped, 7)
+    acc1_palette = GetPedPaletteVariation(ped, 7)
+    acc1_texture = GetPedTextureVariation(ped, 7)
+
+    acc2_drawable = GetPedDrawableVariation(ped, 8)
+    acc2_palette = GetPedPaletteVariation(ped, 8)
+    acc2_texture = GetPedTextureVariation(ped, 8)
+
+    acc3_drawable = GetPedDrawableVariation(ped, 9)
+    acc3_palette = GetPedPaletteVariation(ped, 9)
+    acc3_texture = GetPedTextureVariation(ped, 9)
+
+    mask_drawable = GetPedDrawableVariation(ped, 10)
+    mask_palette = GetPedPaletteVariation(ped, 10)
+    mask_texture = GetPedTextureVariation(ped, 10)
+
+    aux_drawable = GetPedDrawableVariation(ped, 11)
+    aux_palette = GetPedPaletteVariation(ped, 11)   
+    aux_texture = GetPedTextureVariation(ped, 11)
+
+    SetPedPropIndex(me, 0, hat, hat_texture, 1)
+    SetPedPropIndex(me, 1, glasses, glasses_texture, 1)
+    SetPedPropIndex(me, 2, ear, ear_texture, 1)
+    SetPedPropIndex(me, 6, watch, watch_texture, 1)
+    SetPedPropIndex(me, 7, wrist, wrist_texture, 1)
+
+    SetPedComponentVariation(me, 0, head_drawable, head_texture, head_palette)
+    SetPedComponentVariation(me, 1, beard_drawable, beard_texture, beard_palette)
+    SetPedComponentVariation(me, 2, hair_drawable, hair_texture, hair_palette)
+    SetPedComponentVariation(me, 3, torso_drawable, torso_texture, torso_palette)
+    SetPedComponentVariation(me, 4, legs_drawable, legs_texture, legs_palette)
+    SetPedComponentVariation(me, 5, hands_drawable, hands_texture, hands_palette)
+    SetPedComponentVariation(me, 6, foot_drawable, foot_texture, foot_palette)
+    SetPedComponentVariation(me, 7, acc1_drawable, acc1_texture, acc1_palette)
+    SetPedComponentVariation(me, 8, acc2_drawable, acc2_texture, acc2_palette)
+    SetPedComponentVariation(me, 9, acc3_drawable, acc3_texture, acc3_palette)
+    SetPedComponentVariation(me, 10, mask_drawable, mask_texture, mask_palette)
+    SetPedComponentVariation(me, 11, aux_drawable, aux_texture, aux_palette)
 end

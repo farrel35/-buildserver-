@@ -1,4 +1,5 @@
 
+local savedCoords   = {}
 SpectateData = {}
 
 AddEventHandler("playerConnecting", function(playerName, setKickReason, deferrals)
@@ -7,7 +8,7 @@ AddEventHandler("playerConnecting", function(playerName, setKickReason, deferral
 
     deferrals.defer()
     deferrals.update(string.format(" Hello %s. Checking ban status!", playerName))
-    Wait(5000)
+    Wait(1000)
     local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE identifier = ?', {identifier})
 
     if data ~= nil then
@@ -81,8 +82,9 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expires, Reason)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
-
+    
     local identifier = ESX.GetIdentifier(ServerId)
     local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
     if BanData and BanData[1] ~= nil then
@@ -129,6 +131,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/kick-player", function(ServerId, Reason)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
     
     DropPlayer(ServerId, Reason)
@@ -137,6 +140,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/give-item", function(ServerId, ItemName, ItemAmount)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
@@ -146,6 +150,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/request-job", function(ServerId, JobName)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
@@ -155,6 +160,7 @@ end)
 
 RegisterNetEvent('farrel-adminmenu/server/start-spectate', function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     -- Check if Person exists
@@ -188,6 +194,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/drunk", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/drunk', ServerId)
@@ -195,6 +202,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/animal-attack", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/animal-attack', ServerId)
@@ -202,6 +210,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/set-fire", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/set-fire', ServerId)
@@ -209,6 +218,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/fling-player", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/fling-player', ServerId)
@@ -216,6 +226,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/play-sound", function(ServerId, SoundId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/play-sound', ServerId, SoundId)
@@ -238,22 +249,49 @@ RegisterNetEvent("farrel-adminmenu/server/toggle-blips", function()
     TriggerClientEvent('farrel-adminmenu/client/UpdatePlayerBlips', src, BlipData)
 end)
 
-
 RegisterNetEvent("farrel-adminmenu/server/teleport-player", function(ServerId, Type)
     local src = source
+
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     local Msg = ""
     if Type == 'Goto' then
-        Msg = _U('teleportedto') 
+        Msg = _U('teleportedgoto') 
+        local xCoords = GetEntityCoords(GetPlayerPed(src))
         local TCoords = GetEntityCoords(GetPlayerPed(ServerId))
+        savedCoords[source] = xCoords
         TriggerClientEvent('farrel-adminmenu/client/teleport-player', src, TCoords)
+        TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
+    elseif Type == 'Goback' then
+        Msg = _U('teleportedgoback') 
+        local playerCoords = savedCoords[source]
+        if playerCoords then
+            TriggerClientEvent('farrel-adminmenu/client/teleport-player', src, playerCoords)
+            TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
+            savedCoords[source] = nil
+        else
+            TriggerClientEvent('esx:showNotification', src, "No saved coords player", 'error')
+        end
     elseif Type == 'Bring' then
-        Msg = _U('teleportedbrought')
+        Msg = _U('teleportedbring')
         local Coords = GetEntityCoords(GetPlayerPed(src))
+        local TCoords = GetEntityCoords(GetPlayerPed(ServerId))
+        savedCoords[ServerId] = TCoords
         TriggerClientEvent('farrel-adminmenu/client/teleport-player', ServerId, Coords)
+        TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
+    elseif Type == 'Bringback' then
+        Msg = _U('teleportedbringback')
+        local playerCoords = savedCoords[ServerId]
+        if playerCoords then
+            TriggerClientEvent('farrel-adminmenu/client/teleport-player', ServerId, savedCoords[ServerId])
+            TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
+            savedCoords[ServerId] = nil
+        else
+            TriggerClientEvent('esx:showNotification', src, "No saved coords player", 'error')
+        end
     end
-    TriggerClientEvent('esx:showNotification', src, _U('teleported', {tpmsg = Msg}), 'success')
+    
 end)
 
 RegisterNetEvent("farrel-adminmenu/server/chat-say", function(Message)
@@ -266,6 +304,9 @@ end)
 -- Player Actions
 
 RegisterNetEvent("farrel-adminmenu/server/toggle-godmode", function(ServerId)
+    local src = source
+    if not ServerId or ServerId == "" then return end
+    if not IsPlayerAdmin(src) then return end
     TriggerClientEvent('farrel-adminmenu/client/toggle-godmode', ServerId)
 end)
 
@@ -298,6 +339,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/set-armor", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
@@ -309,6 +351,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/reset-model", function(ServerId)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
@@ -317,6 +360,7 @@ end)
 
 RegisterNetEvent("farrel-adminmenu/server/set-model", function(ServerId, Model)
     local src = source
+    if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
 
     TriggerClientEvent('farrel-adminmenu/client/set-model', ServerId, Model)
@@ -333,7 +377,8 @@ RegisterNetEvent("farrel-adminmenu/server/revive-in-distance", function()
 			local TargetCoords = GetEntityCoords(GetPlayerPed(v))
 			local TargetDistance = #(TargetCoords - Coords)
 			if TargetDistance <= Radius then
-                TriggerClientEvent('hospital:client:Revive', v, true)
+                -- TriggerClientEvent('hospital:client:Revive', v, true)
+                TriggerClientEvent('esx_ambulancejob:revive', v)
 			end
 		end
 	end
@@ -343,7 +388,10 @@ RegisterNetEvent("farrel-adminmenu/server/revive-target", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('hospital:client:Revive', ServerId, true)
+    -- TriggerClientEvent('hospital:client:Revive', ServerId, true)
+    TriggerClientEvent('esx_ambulancejob:revive', ServerId)
+
+    
     TriggerClientEvent('esx:showNotification', src, _U('revived'), 'success')
 end)
 
@@ -357,7 +405,7 @@ end)
 
 RegisterNetEvent('farrel-adminmenu/server/give-vehicle', function(Steamhex, Model, Plate, Type)
     local src = source
-    
+    if not Steamhex or Steamhex == "" then return end
     if not IsPlayerAdmin(src) then return end
     
     if Type == "Online" then

@@ -15,7 +15,7 @@ CreateThread(function()
         else
             clearGamerTagInfo()
         end
-        Wait(50)
+        Wait(500)
     end
 end)
 
@@ -33,13 +33,13 @@ function calculateSpectatorCoords(coords)
 end
 
 function createGamerTagInfo()
-    if storedGameTag and IsMpGamerTagActive(storedGameTag) then return end
+    -- if storedGameTag and IsMpGamerTagActive(storedGameTag) then return end
     local nameTag = ('[%d] %s'):format(GetPlayerServerId(storedTargetPlayerId), GetPlayerName(storedTargetPlayerId))
     storedGameTag = CreateFakeMpGamerTag(storedTargetPed, nameTag, false, false, '', 0, 0, 0, 0)
     SetMpGamerTagVisibility(storedGameTag, 2, 1)  --set the visibility of component 2(healthArmour) to true
     SetMpGamerTagAlpha(storedGameTag, 2, 255) --set the alpha of component 2(healthArmour) to 255
     SetMpGamerTagHealthBarColor(storedGameTag, 129) --set component 2(healthArmour) color to 129(HUD_COLOUR_YOGA)
-    SetMpGamerTagVisibility(storedGameTag, 4, NetworkIsPlayerTalking(i))
+    SetMpGamerTagVisibility(storedGameTag, 4, NetworkIsPlayerTalking(storedTargetPlayerId))
 end
 
 function clearGamerTagInfo()

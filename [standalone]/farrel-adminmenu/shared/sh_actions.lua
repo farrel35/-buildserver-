@@ -31,6 +31,20 @@ Config.AdminMenus = {
                 },
             },
             {
+                ['Id'] = 'clone',
+                ['Name'] = 'Clone',
+                ['Event'] = 'Admin:Change:Clone',
+                ['Collapse'] = true,
+                ['Options'] = {
+                    {
+                        ['Id'] = 'player',
+                        ['Name'] = 'Player',
+                        ['Type'] = 'input-choice',
+                        ['PlayerList'] = true,
+                    },
+                },
+            },
+            {
                 ['Id'] = 'rmodel',
                 ['Name'] = 'Reset Model',
                 ['Event'] = 'Admin:Reset:Model',
@@ -103,7 +117,8 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'opinventory',
                 ['Name'] = 'Open Inventory',
-                ['Event'] = 'Admin:OpenInv',
+                ['Event'] = 'viewinv',
+                ['EventType'] = 'Command',
                 ['Collapse'] = true,
                 ['Options'] = {
                     {
@@ -217,7 +232,13 @@ Config.AdminMenus = {
                                 Text = 'Goto'
                             },
                             {
+                                Text = 'Goback'
+                            },
+                            {
                                 Text = 'Bring'
+                            },
+                            {
+                                Text = 'Bringback'
                             }
                         }
                     },
@@ -386,9 +407,9 @@ Config.AdminMenus = {
                 },
             },
             {
-                ['Id'] = 'fartPlayer',
-                ['Name'] = 'Fart Sound',
-                ['Event'] = 'Admin:Fart:Player',
+                ['Id'] = 'soundPlayer',
+                ['Name'] = 'Play Sound',
+                ['Event'] = 'Admin:Sound:Player',
                 ['Collapse'] = true,
                 ['Options'] = {
                     {
@@ -398,8 +419,8 @@ Config.AdminMenus = {
                         ['PlayerList'] = true,
                     },
                     {
-                        ['Id'] = 'fart',
-                        ['Name'] = 'Fart',
+                        ['Id'] = 'sound',
+                        ['Name'] = 'Sound',
                         ['Type'] = 'input-choice',
                         ['Choices'] = {
                             {

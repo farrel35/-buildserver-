@@ -139,6 +139,12 @@ RegisterNetEvent('Admin:Change:Model', function(Result)
     end
 end)
 
+RegisterNetEvent('Admin:Change:Clone', function(Result)
+    if not isAdmin then return end
+
+    cloneModel(Result['player'])
+end)
+
 RegisterNetEvent('Admin:Reset:Model', function(Result)
     if not isAdmin then return end
 
@@ -257,10 +263,10 @@ RegisterNetEvent("Admin:Copy:Coords", function(Result)
     })
 end)
 
-RegisterNetEvent("Admin:Fart:Player", function(Result)
+RegisterNetEvent("Admin:Sound:Player", function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('farrel-adminmenu/server/play-sound', Result['player'], Result['fart'])
+    TriggerServerEvent('farrel-adminmenu/server/play-sound', Result['player'], Result['sound'])
 end)
 
 RegisterNetEvent('Admin:Toggle:PlayerBlips', function()
@@ -337,7 +343,8 @@ RegisterNetEvent("Admin:OpenInv", function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    -- TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", Result['player'])
+    
+    exports.ox_inventory:openInventory('player', Result['player'])
 end)
 
 RegisterNetEvent("Admin:GiveVehicle", function(Result)
@@ -431,6 +438,7 @@ RegisterNetEvent("farrel-adminmenu/client/play-sound", function(Sound)
     elseif Sound == 'Wet Fart' then
         Soundfile = 'FartNoise'
     end
+
     TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 5, Soundfile, 0.3)
 end)
 
