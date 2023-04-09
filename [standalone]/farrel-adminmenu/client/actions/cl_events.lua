@@ -78,7 +78,7 @@ RegisterNetEvent('Admin:Teleport:Marker', function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    TriggerEvent('QBCore:Command:GoToMarker')
+    TriggerEvent('esx:tpm')
 end)
 
 RegisterNetEvent('Admin:Teleport:Coords', function(Result)
@@ -205,7 +205,13 @@ end)
 RegisterNetEvent('Admin:Ban', function(Result)
     if not isAdmin then return end
 
-    TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['player'], Result['expire'], Result['reason'])
+    TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['player'], Result['expire'], Result['reason'], "Online")
+end)
+
+RegisterNetEvent('Admin:BanOffline', function(Result)
+    if not isAdmin then return end
+
+    TriggerServerEvent('farrel-adminmenu/server/ban-player', Result['steamhex'], Result['expire'], Result['reason'], "Offline")
 end)
 
 RegisterNetEvent('Admin:Unban', function(Result)

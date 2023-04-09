@@ -486,6 +486,54 @@ Config.AdminMenus = {
                 },
             },
             {
+                ['Id'] = 'banPlayerOffline',
+                ['Name'] = 'Ban Player Offline',
+                ['Event'] = 'Admin:BanOffline',
+                ['Collapse'] = true,
+                ['Options'] = {
+                    {
+                        ['Id'] = 'steamhex',
+                        ['Name'] = 'Steamhex',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                    {
+                        ['Id'] = 'expire',
+                        ['Name'] = 'Expire',
+                        ['Type'] = 'input-choice',
+                        ['Choices'] = {
+                            {
+                                Text = '1 Hour'
+                            },
+                            {
+                                Text = '6 Hours'
+                            },
+                            {
+                                Text = '12 Hours'
+                            },
+                            {
+                                Text = '1 Day'
+                            },
+                            {
+                                Text = '3 Days'
+                            },
+                            {
+                                Text = '1 Week'
+                            },
+                            {
+                                Text = 'Permanent'
+                            }
+                        }
+                    },
+                    {
+                        ['Id'] = 'reason',
+                        ['Name'] = 'Reason',
+                        ['Type'] = 'input',
+                        ['InputType'] = 'text',
+                    },
+                },
+            },
+            {
                 ['Id'] = 'banPlayer',
                 ['Name'] = 'Ban Player',
                 ['Event'] = 'Admin:Ban',

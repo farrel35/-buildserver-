@@ -113,7 +113,7 @@ function toggleSpectate(targetPed, targetPlayerId)
         -- debugPrint(('Set spectate to false for targetPed (%s)'):format(storedTargetPed))
         clearGamerTagInfo()
         DoScreenFadeIn(500)
-        ESX.ShowNotification(_U('stopped', {player = GetPlayerName(storedTargetPlayerId)..' ('..GetPlayerServerId(storedTargetPlayerId)..')'}))
+        ESX.ShowNotification(_U('stopped', GetPlayerName(storedTargetPlayerId)..' ('..GetPlayerServerId(storedTargetPlayerId)..')'))
         storedTargetPed = nil
     else
         storedTargetPed = targetPed
@@ -129,7 +129,7 @@ function toggleSpectate(targetPed, targetPlayerId)
 
         NetworkSetInSpectatorMode(true, targetPed)
         DoScreenFadeIn(500)
-        ESX.ShowNotification(_U('started', {player = GetPlayerName(storedTargetPlayerId)..' ('..GetPlayerServerId(storedTargetPlayerId)..')'}))
+        ESX.ShowNotification(_U('started', GetPlayerName(storedTargetPlayerId)..' ('..GetPlayerServerId(storedTargetPlayerId)..')'))
         -- debugPrint(('Now spectating TargetPed (%s)'):format(targetPed))
         isSpectateEnabled = true
         createSpectatorTeleportThread()
@@ -166,9 +166,9 @@ RegisterNetEvent('Mercy/client/specPlayer', function(targetServerId, coords)
     lastSpectateLocation = GetEntityCoords(spectatorPed)
 
     local targetPlayerId = GetPlayerFromServerId(targetServerId)
-    if targetPlayerId == PlayerId() then
-        return ESX.ShowNotification(_U('self'), 'error')
-    end
+    -- if targetPlayerId == PlayerId() then
+    --     return ESX.ShowNotification(_U('self'), 'error')
+    -- end
 
     DoScreenFadeOut(500)
     while not IsScreenFadedOut() do Wait(0) end

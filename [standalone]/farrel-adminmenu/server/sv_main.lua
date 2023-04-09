@@ -73,45 +73,68 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-players', function(sourc
         PlayerList[#PlayerList + 1] = {
             ServerId = v,
             Name = GetPlayerName(v),
-            Steam = ESX.GetIdentifier(v, "steam"),
-            License = ESX.GetIdentifier(v, "license")
+            Steam = ESX.GetIdentifier(v),
         }
     end
     Cb(PlayerList)
 end)
 
-RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expires, Reason)
+RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expires, Reason, Type)
     local src = source
     if not ServerId or ServerId == "" then return end
     if not IsPlayerAdmin(src) then return end
     
-    local identifier = ESX.GetIdentifier(ServerId)
-    local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
-    if BanData and BanData[1] ~= nil then
-        for k, v in pairs(BanData) do
-            TriggerClientEvent('esx:showNotification', src, _U('already_banned',GetPlayerName(ServerId), v.reason), 'error')
+    if Type == "Online" then
+        local identifier = ESX.GetIdentifier(ServerId)
+        local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
+        if BanData and BanData[1] ~= nil then
+            for k, v in pairs(BanData) do
+                TriggerClientEvent('esx:showNotification', src, _U('already_banned',GetPlayerName(ServerId), v.reason), 'error')
+            end
+        else
+            local Expiring, ExpireDate = GetBanTime(Expires)
+            local Time = os.time()
+            local BanId = "BAN-"..math.random(0, 99999)
+            MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+                BanId,
+                GetPlayerName(ServerId),
+                identifier,
+                Reason,
+                GetPlayerName(src),
+                ExpireDate,
+                Time,
+            })
+            TriggerClientEvent('esx:showNotification', src, _U('success_banned', GetPlayerName(ServerId), Reason), 'success')
+            local ExpireHours = tonumber(Expiring['hour']) < 10 and "0"..Expiring['hour'] or Expiring['hour']
+            local ExpireMinutes = tonumber(Expiring['min']) < 10 and "0"..Expiring['min'] or Expiring['min']
+            local ExpiringDate = Expiring['day'] .. '/' .. Expiring['month'] .. '/' .. Expiring['year'] .. ' | '..ExpireHours..':'..ExpireMinutes
+            if Expires == "Permanent" then
+                DropPlayer(ServerId,  _U('perm_banned', Reason))
+            else
+                DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
+            end
         end
     else
-        local Expiring, ExpireDate = GetBanTime(Expires)
-        local Time = os.time()
-        local BanId = "BAN-"..math.random(0, 99999)
-        MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
-            BanId,
-            GetPlayerName(ServerId),
-            identifier,
-            Reason,
-            GetPlayerName(src),
-            ExpireDate,
-            Time,
-        })
-        TriggerClientEvent('esx:showNotification', src, _U('success_banned', GetPlayerName(ServerId), Reason), 'success')
-        local ExpireHours = tonumber(Expiring['hour']) < 10 and "0"..Expiring['hour'] or Expiring['hour']
-        local ExpireMinutes = tonumber(Expiring['min']) < 10 and "0"..Expiring['min'] or Expiring['min']
-        local ExpiringDate = Expiring['day'] .. '/' .. Expiring['month'] .. '/' .. Expiring['year'] .. ' | '..ExpireHours..':'..ExpireMinutes
-        if Expires == "Permanent" then
-            DropPlayer(ServerId,  _U('perm_banned', Reason))
+        local identifier = ServerId
+        local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
+        if BanData and BanData[1] ~= nil then
+            for k, v in pairs(BanData) do
+                TriggerClientEvent('esx:showNotification', src, _U('already_banned', ServerId, v.reason), 'error')
+            end
         else
-            DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
+            local Expiring, ExpireDate = GetBanTime(Expires)
+            local Time = os.time()
+            local BanId = "BAN-"..math.random(0, 99999)
+            MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+                BanId,
+                ServerId,
+                identifier,
+                Reason,
+                GetPlayerName(src),
+                ExpireDate,
+                Time,
+            })
+            TriggerClientEvent('esx:showNotification', src, _U('success_banned', ServerId, Reason), 'success')
         end
     end
 end)
@@ -170,7 +193,7 @@ RegisterNetEvent('farrel-adminmenu/server/start-spectate', function(ServerId)
     end
 
     -- Make Check for Spectating
-    local SteamIdentifier = ESX.GetIdentifier(src, "steam")
+    local SteamIdentifier = ESX.GetIdentifier(src)
     if SpectateData[SteamIdentifier] ~= nil then
         SpectateData[SteamIdentifier]['Spectating'] = true
     else
@@ -186,7 +209,7 @@ RegisterNetEvent('farrel-adminmenu/server/stop-spectate', function()
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local SteamIdentifier = ESX.GetIdentifier(src, "steam")
+    local SteamIdentifier = ESX.GetIdentifier(src)
     if SpectateData[SteamIdentifier] ~= nil and SpectateData[SteamIdentifier]['Spectating'] then
         SpectateData[SteamIdentifier]['Spectating'] = false
     end
