@@ -294,7 +294,7 @@ RegisterNetEvent("farrel-adminmenu/server/teleport-player", function(ServerId, T
             TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
             savedCoords[source] = nil
         else
-            TriggerClientEvent('esx:showNotification', src, "No saved coords player", 'error')
+            TriggerClientEvent('esx:showNotification', src, _U("teleportednocoords"), 'error')
         end
     elseif Type == 'Bring' then
         Msg = _U('teleportedbring')
@@ -311,7 +311,7 @@ RegisterNetEvent("farrel-adminmenu/server/teleport-player", function(ServerId, T
             TriggerClientEvent('esx:showNotification', src, _U('teleported', Msg), 'success')
             savedCoords[ServerId] = nil
         else
-            TriggerClientEvent('esx:showNotification', src, "No saved coords player", 'error')
+            TriggerClientEvent('esx:showNotification', src, _U("teleportednocoords"), 'error')
         end
     end
     
@@ -430,23 +430,30 @@ RegisterNetEvent('farrel-adminmenu/server/give-vehicle', function(Steamhex, Mode
     local src = source
     if not Steamhex or Steamhex == "" then return end
     if not IsPlayerAdmin(src) then return end
-    
-    if Type == "Online" then
-        local xPlayer = ESX.GetPlayerFromId(src)
-        local tPlayer = ESX.GetPlayerFromId(Steamhex)
 
-        MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {tPlayer.identifier, Plate, json.encode({model = joaat(Model), plate = Plate}), true
-        }, function(rowsChanged)
-            xPlayer.showNotification("Berhasil give kendaraan ke " .. GetPlayerName(Steamhex) .. " dengan plat " .. Plate)
-            tPlayer.showNotification("Menerima kendaraan dari admin dengan plat " .. Plate)
-        end)
+    local plateData = MySQL.query.await('SELECT * FROM owned_vehicles WHERE plate = ?', {Plate})
+    if plateData and plateData[1] ~= nil then
+        for k, v in pairs(plateData) do
+            TriggerClientEvent('esx:showNotification', src, _U('duplicateplate', v.owner), 'error')
+        end
     else
-        local xPlayer = ESX.GetPlayerFromId(src)
+        if Type == "Online" then
+            local xPlayer = ESX.GetPlayerFromId(src)
+            local tPlayer = ESX.GetPlayerFromId(Steamhex)
 
-        MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {Steamhex, Plate, json.encode({model = joaat(Model), plate = Plate}), true
-        }, function(rowsChanged)
-            xPlayer.showNotification("Berhasil give kendaraan")
-        end)
+            MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {tPlayer.identifier, Plate, json.encode({model = joaat(Model), plate = Plate}), true
+            }, function(rowsChanged)
+                xPlayer.showNotification(_U("givevehicle", GetPlayerName(Steamhex), Plate))
+                tPlayer.showNotification(_U("receivevehicle", Plate))
+            end)
+        else
+            local xPlayer = ESX.GetPlayerFromId(src)
+
+            MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (?, ?, ?, ?)', {Steamhex, Plate, json.encode({model = joaat(Model), plate = Plate}), true
+            }, function(rowsChanged)
+                xPlayer.showNotification(_U("givevehicle", Steamhex, Plate))
+            end)
+        end
     end
 end)
 
@@ -457,35 +464,4 @@ function disp_time(time)
     local m = math.floor((t % 3600) / 60)
     local s = math.floor((t % 60))
     return {days = d , hours = h , minutes = m, seconds = s}
-  end
-  
-RegisterCommand('gban', function(source, args, rawCommand)
-    -- TriggerClientEvent('chat:client:ClearChat', source)
-    local player = source
-    local steamIdentifier
-    local steamid  = false
-    local license  = false
-    local discord  = false
-    local xbl      = false
-    local liveid   = false
-    local ip       = false
-    for k,v in pairs(GetPlayerIdentifiers(player))do
-      if string.sub(v, 1, string.len("steam:")) == "steam:" then
-        steamid = v
-      elseif string.sub(v, 1, string.len("license:")) == "license:" then
-        license = v
-      elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
-        xbl  = v
-      elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
-        ip = v
-      elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
-        discord = v
-      elseif string.sub(v, 1, string.len("live:")) == "live:" then
-        liveid = v
-      end
-    end
-
-    local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE license = ?', { steamid})
-    local timeremaining = (disp_time(tonumber(data[1].expire)))
-    print(', you are banned from this server! \n Your ban will be expired in '..timeremaining.days..' days, '..timeremaining.hours..' hours and '..timeremaining.seconds ..' seconds! ('..os.date("%Y-%m-%d %H:%M",data[1].expire)..') ')
-end, false)
+end

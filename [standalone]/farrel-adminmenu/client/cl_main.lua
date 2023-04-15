@@ -9,14 +9,6 @@ AddEventHandler('esx:playerLoaded', function()
     LoggedIn = true
 end)
 
-RegisterCommand('gperm', function(source, args, RawCommand) 
-    RefreshMenu('All')
-    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
-        isAdmin = admin
-    end)
-    LoggedIn = true
-end, false)
-
 RegisterNetEvent('esx:onPlayerDeath')
 AddEventHandler('esx:onPlayerDeath', function()
     ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
@@ -41,6 +33,7 @@ end)
 CreateThread(function()
     while true do
         Wait(4)
+        
         if LoggedIn then
             if BlipsEnabled then
                 if BlipData ~= nil then
@@ -59,6 +52,7 @@ CreateThread(function()
                             BeginTextCommandSetBlipName("STRING")
                             AddTextComponentString('['..v.ServerId..'] '..v.Name)
                             EndTextCommandSetBlipName(PlayerBlip)
+                            
                             table.insert(AllPlayerBlips, PlayerBlip)
                         end
                     end    
@@ -80,10 +74,16 @@ end)
 
 RegisterKeyMapping('adminmenu', _U('keymapping_desc'), 'keyboard', Config.Settings['DefaultOpenKeybind'])
 RegisterCommand('adminmenu', function(source, args, RawCommand) 
-    RefreshMenu('All')
-    ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
-        isAdmin = admin
-    end)
+    if isAdmin == nil then 
+		print('get admin again')
+        RefreshMenu('All')
+        ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
+            isAdmin = admin
+        end)
+        LoggedIn = true
+		Wait(500)
+	end
+   
     TriggerEvent('farrel-adminmenu/client/try-open-menu') 
 end, false)
 

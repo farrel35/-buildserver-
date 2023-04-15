@@ -212,6 +212,34 @@ Config.AdminMenus = {
                 ['Collapse'] = false,
             },
             {
+                ['Id'] = 'entityFreeAim',
+                ['Name'] = 'View Free Aim',
+                ['Event'] = 'Admin:Toggle:FreeAim',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
+            },
+            {
+                ['Id'] = 'entityVehicle',
+                ['Name'] = 'View Vehicle',
+                ['Event'] = 'Admin:Toggle:ViewVehicle',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
+            },
+            {
+                ['Id'] = 'entityObject',
+                ['Name'] = 'View Object',
+                ['Event'] = 'Admin:Toggle:ViewObject',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
+            },
+            {
+                ['Id'] = 'entityPed',
+                ['Name'] = 'View Ped',
+                ['Event'] = 'Admin:Toggle:ViewPed',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
+            },
+            {
                 ['Id'] = 'teleport',
                 ['Name'] = 'Teleport',
                 ['Event'] = 'Admin:Teleport',
@@ -343,6 +371,7 @@ Config.AdminMenus = {
                     },
                 },
             },
+            
         }
     },
 
@@ -432,6 +461,13 @@ Config.AdminMenus = {
                         },
                     },
                 },
+            },
+            {
+                ['Id'] = 'drone',
+                ['Name'] = 'Drone',
+                ['Event'] = 'Admin:Toggle:Drone',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
             },
         }
     },

@@ -60,7 +60,7 @@ RegisterNetEvent('Admin:Spawn:Vehicle', function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    -- TriggerEvent('QBCore:Command:SpawnVehicle', Result['model'])
+
     ESX.Game.SpawnVehicle(Result['model'], GetEntityCoords(PlayerPedId()), 0, function(callback_vehicle)
         SetVehRadioStation(callback_vehicle, "OFF")
         SetVehicleFixed(callback_vehicle)
@@ -331,6 +331,62 @@ RegisterNetEvent('Admin:Toggle:PlayerNames', function()
     end
 end)
 
+RegisterNetEvent('Admin:Toggle:FreeAim', function()
+    if not isAdmin then return end
+
+    FreeAimEnabled = not FreeAimEnabled
+
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'entityFreeAim',
+        State = FreeAimEnabled
+    })
+
+    ToggleEntityFreeView()
+end)
+
+RegisterNetEvent('Admin:Toggle:ViewVehicle', function()
+    if not isAdmin then return end
+
+    ViewVehicleEnabled = not ViewVehicleEnabled
+
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'entityVehicle',
+        State = ViewVehicleEnabled
+    })
+
+    ToggleEntityVehicleView()
+end)
+
+RegisterNetEvent('Admin:Toggle:ViewObject', function()
+    if not isAdmin then return end
+
+    ViewObjectEnabled = not ViewObjectEnabled
+
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'entityObject',
+        State = ViewObjectEnabled
+    })
+
+    ToggleEntityObjectView()
+end)
+
+RegisterNetEvent('Admin:Toggle:ViewPed', function()
+    if not isAdmin then return end
+
+    ViewPedEnabled = not ViewPedEnabled
+
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'entityPed',
+        State = ViewPedEnabled
+    })
+
+    ToggleEntityPedView()
+end)
+
 RegisterNetEvent('Admin:Toggle:Spectate', function(Result)
     if not isAdmin then return end
 
@@ -379,6 +435,28 @@ RegisterNetEvent("Admin:GiveVehicleOffline", function(Result)
     end
 
    TriggerServerEvent("farrel-adminmenu/server/give-vehicle", Result['steamhex'], Result['model'], Result['plate'], "Offline")
+end)
+
+RegisterNetEvent('Admin:Toggle:Drone', function(Result)
+    if not isAdmin then return end
+
+    DroneEnabled = not DroneEnabled
+
+    SendNUIMessage({
+        Action = 'Close',
+    })
+    
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'drone',
+        State = DroneEnabled
+    })
+
+    if DroneEnabled then
+        newDrone()
+    else
+        deleteDrone()
+    end
 end)
 
 -- [ Triggered Events ] --
@@ -433,9 +511,6 @@ RegisterNetEvent('farrel-adminmenu/client/reset-model', function()
     end)
 end)
 
-RegisterNetEvent('farrel-adminmenu/client/armor-up', function()
-    SetPedArmour(PlayerPedId(), 100.0)
-end)
 
 RegisterNetEvent("farrel-adminmenu/client/play-sound", function(Sound)
     local Soundfile = nil

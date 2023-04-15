@@ -13,7 +13,9 @@ shared_scripts {
 
 client_scripts {
     'client/**/cl_*.lua',
+    'shared/sh_entity.lua',
     'shared/sh_actions.lua',
+    
 }
 
 server_scripts {
