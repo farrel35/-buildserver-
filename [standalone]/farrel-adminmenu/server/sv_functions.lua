@@ -34,3 +34,25 @@ function GetBanTime(Expires)
     end
     return Expiring, ExpD
 end
+
+function GetIdentifier(Source, Type)
+    local Identifier = nil
+    local Prom = promise:new()
+    for k,v in pairs(GetPlayerIdentifiers(Source))do
+        if string.sub(v, 1, string.len("steam:")) == "steam:" and Type == 'steam' then
+            Identifier = v
+        elseif string.sub(v, 1, string.len("license:")) == "license:" and Type == 'license' then
+            Identifier = v
+        elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" and Type == 'xbl' then
+            Identifier = v
+        elseif string.sub(v, 1, string.len("ip:")) == "ip:" and Type == 'ip' then
+            Identifier = v
+        elseif string.sub(v, 1, string.len("discord:")) == "discord:" and Type == 'discord' then
+            Identifier = v
+        elseif string.sub(v, 1, string.len("live:")) == "live:" and Type == 'live' then
+            Identifier = v
+        end
+    end
+    Prom:resolve(Identifier)
+    return Citizen.Await(Prom)
+end

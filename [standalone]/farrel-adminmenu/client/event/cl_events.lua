@@ -405,8 +405,9 @@ RegisterNetEvent("Admin:OpenInv", function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
+
     if GetResourceState('ox_inventory') == 'started' then
-        exports.ox_inventory:openInventory('player', Result['player'])
+        ExecuteCommand("viewinv" .. " " .. Result['player'])
     end
 end)
 
@@ -498,15 +499,13 @@ RegisterNetEvent("farrel-adminmenu/client/toggle-godmode", function()
     local MsgType = GodmodeEnabled and 'success' or 'error'
     ESX.ShowNotification('Godmode '..Msg, MsgType)
 
-    if GodmodeEnabled then
-        while GodmodeEnabled do
-            Wait(0)
-            SetPlayerInvincible(PlayerId(), true)
-        end
-        SetPlayerInvincible(PlayerId(), false)
-    else
-        SetPlayerInvincible(PlayerId(), false)
+    while GodmodeEnabled do
+        Wait(1)
+        SetPlayerInvincible(PlayerId(), true)
     end
+    SetTimeout(250, function()
+        SetPlayerInvincible(PlayerId(), false)
+    end)
 end)
 
 RegisterNetEvent('farrel-adminmenu/client/teleport-player', function(Coords)
@@ -541,27 +540,6 @@ RegisterNetEvent('farrel-adminmenu/client/reset-model', function()
     end)
 end)
 
-
-RegisterNetEvent("farrel-adminmenu/client/play-sound", function(Sound)
-    local Soundfile = nil
-    if Sound == 'Fart' then
-        Soundfile = 'FartNoise2'
-    elseif Sound == 'Wet Fart' then
-        Soundfile = 'FartNoise'
-    end
-
-    TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 5, Soundfile, 0.3)
-end)
-
-RegisterNetEvent('farrel-adminmenu/client/fling-player', function()
-    local Ped = PlayerPedId()
-    if GetVehiclePedIsUsing(Ped) ~= 0 then
-        ApplyForceToEntity(GetVehiclePedIsUsing(Ped), 1, 0.0, 0.0, 100000.0, 1.0, 0.0, 0.0, 1, false, true, false, false)
-    else
-        ApplyForceToEntity(Ped, 1, 9500.0, 3.0, 7100.0, 1.0, 0.0, 0.0, 1, false, true, false, false)
-    end
-end)
-
 RegisterNetEvent('farrel-adminmenu/client/DeletePlayerBlips', function()
     if not isAdmin then return end
 
@@ -574,15 +552,3 @@ RegisterNetEvent('farrel-adminmenu/client/UpdatePlayerBlips', function(Data)
     BlipData = Data
 end)
 
-RegisterNetEvent("farrel-adminmenu/client/drunk", function()
-    drunkThread()
-end)
-
-RegisterNetEvent("farrel-adminmenu/client/animal-attack", function()
-    startWildAttack()
-end)
-
-RegisterNetEvent("farrel-adminmenu/client/set-fire", function()
-    local playerPed = PlayerPedId()
-    StartEntityFire(playerPed)
-end)

@@ -9,7 +9,7 @@ AddEventHandler("playerConnecting", function(playerName, setKickReason, deferral
     deferrals.defer()
     deferrals.update(string.format(" Hello %s. Checking ban status!", playerName))
     Wait(1000)
-    local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE identifier = ?', {identifier})
+    local data = MySQL.Sync.fetchAll('SELECT * FROM bans WHERE steam = ?', {identifier})
 
     if data ~= nil then
         if(data[1] == nil) then
@@ -18,7 +18,7 @@ AddEventHandler("playerConnecting", function(playerName, setKickReason, deferral
             local timeremaining = (disp_time(tonumber(data[1].expire)))
             if(os.time() > tonumber(data[1].expire)) then
                 deferrals.done()
-                MySQL.update('DELETE FROM bans WHERE identifier = ?' , {identifier})
+                MySQL.update('DELETE FROM bans WHERE steam = ?' , {identifier})
             else
                 deferrals.done(string.format(_U("banned", data[1].banid, data[1].reason, os.date("%Y-%m-%d %H:%M",data[1].expire), data[1].bannedby)))
             end
@@ -70,10 +70,13 @@ end)
 ESX.RegisterServerCallback('farrel-adminmenu/server/get-players', function(source, Cb)
     local PlayerList = {}
     for k, v in pairs(ESX.GetPlayers()) do
+        local Steam = GetIdentifier(v, "steam")
+        local License = GetIdentifier(v, "license")
         PlayerList[#PlayerList + 1] = {
             ServerId = v,
             Name = GetPlayerName(v),
-            Steam = ESX.GetIdentifier(v),
+            Steam = Steam ~= nil and Steam or 'Not Found',
+            License = License  ~= nil and License or Steam
         }
     end
     Cb(PlayerList)
@@ -85,8 +88,9 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
     if not IsPlayerAdmin(src) then return end
     
     if Type == "Online" then
-        local identifier = ESX.GetIdentifier(ServerId)
-        local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
+        local License = GetIdentifier(ServerId, 'license')
+        local Steam = GetIdentifier(ServerId, 'steam')
+        local BanData = MySQL.query.await('SELECT * FROM bans WHERE steam = ?', {Steam})
         if BanData and BanData[1] ~= nil then
             for k, v in pairs(BanData) do
                 TriggerClientEvent('esx:showNotification', src, _U('already_banned',GetPlayerName(ServerId), v.reason), 'error')
@@ -95,10 +99,13 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
             local Expiring, ExpireDate = GetBanTime(Expires)
             local Time = os.time()
             local BanId = "BAN-"..math.random(0, 99999)
-            MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            MySQL.insert('INSERT INTO bans (banid, name, steam, license, discord, ip, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
                 BanId,
                 GetPlayerName(ServerId),
-                identifier,
+                Steam,
+                License,
+                GetIdentifier(ServerId, 'discord'),
+                GetIdentifier(ServerId, 'ip'),
                 Reason,
                 GetPlayerName(src),
                 ExpireDate,
@@ -108,15 +115,15 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
             local ExpireHours = tonumber(Expiring['hour']) < 10 and "0"..Expiring['hour'] or Expiring['hour']
             local ExpireMinutes = tonumber(Expiring['min']) < 10 and "0"..Expiring['min'] or Expiring['min']
             local ExpiringDate = Expiring['day'] .. '/' .. Expiring['month'] .. '/' .. Expiring['year'] .. ' | '..ExpireHours..':'..ExpireMinutes
-            if Expires == "Permanent" then
-                DropPlayer(ServerId,  _U('perm_banned', Reason))
-            else
-                DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
-            end
+            -- if Expires == "Permanent" then
+            --     DropPlayer(ServerId,  _U('perm_banned', Reason))
+            -- else
+            --     DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
+            -- end
         end
     else
-        local identifier = ServerId
-        local BanData = MySQL.query.await('SELECT * FROM bans WHERE identifier = ?', {identifier})
+        local Steam = ServerId
+        local BanData = MySQL.query.await('SELECT * FROM bans WHERE steam = ?', {Steam})
         if BanData and BanData[1] ~= nil then
             for k, v in pairs(BanData) do
                 TriggerClientEvent('esx:showNotification', src, _U('already_banned', ServerId, v.reason), 'error')
@@ -125,10 +132,10 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
             local Expiring, ExpireDate = GetBanTime(Expires)
             local Time = os.time()
             local BanId = "BAN-"..math.random(0, 99999)
-            MySQL.insert('INSERT INTO bans (banid, name, identifier, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            MySQL.insert('INSERT INTO bans (banid, name, steam, reason, bannedby, expire, bannedon) VALUES (?, ?, ?, ?, ?, ?, ?)', {
                 BanId,
                 ServerId,
-                identifier,
+                Steam,
                 Reason,
                 GetPlayerName(src),
                 ExpireDate,
@@ -193,7 +200,7 @@ RegisterNetEvent('farrel-adminmenu/server/start-spectate', function(ServerId)
     end
 
     -- Make Check for Spectating
-    local SteamIdentifier = ESX.GetIdentifier(src)
+    local SteamIdentifier = GetIdentifier(src, "steam")
     if SpectateData[SteamIdentifier] ~= nil then
         SpectateData[SteamIdentifier]['Spectating'] = true
     else
@@ -209,7 +216,7 @@ RegisterNetEvent('farrel-adminmenu/server/stop-spectate', function()
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    local SteamIdentifier = ESX.GetIdentifier(src)
+    local SteamIdentifier = GetIdentifier(src, "steam")
     if SpectateData[SteamIdentifier] ~= nil and SpectateData[SteamIdentifier]['Spectating'] then
         SpectateData[SteamIdentifier]['Spectating'] = false
     end
@@ -339,10 +346,8 @@ RegisterNetEvent("farrel-adminmenu/server/set-food-drink", function(ServerId)
 
     local xPlayer = ESX.GetPlayerFromId(ServerId)
     if xPlayer ~= nil then
-        xPlayer.Functions.SetMetaData('thirst', 100)
-        xPlayer.Functions.SetMetaData('hunger', 100)
-        TriggerClientEvent('hud:client:UpdateNeeds', ServerId, 100, 100)
-        xPlayer.Functions.Save()
+        TriggerClientEvent('esx_status:add', src, 'hunger', 1000000)
+        TriggerClientEvent('esx_status:add', src, 'thirst', 1000000)
         TriggerClientEvent('esx:showNotification', src, _U('gave_needs'), 'success')
     end
 end)
@@ -422,7 +427,7 @@ RegisterNetEvent("farrel-adminmenu/server/open-clothing", function(ServerId)
     local src = source
     if not IsPlayerAdmin(src) then return end
 
-    TriggerClientEvent('qb-clothing:client:openMenu', ServerId)
+    TriggerClientEvent('esx_skin:openSaveableMenu', src)
     TriggerClientEvent('esx:showNotification', src, _U('gave_clothing'), 'success')
 end)
 

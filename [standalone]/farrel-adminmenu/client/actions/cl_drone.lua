@@ -1,6 +1,6 @@
 local droneHash = 'frogger'
 local speed = 120.0
-
+local blipsDrone = {}
 local drone = {
     active = false,
     vehicleHandle = 0,
@@ -54,7 +54,7 @@ CreateThread(function()
             DisableControlAction(1, 27, true)
             DisableControlAction(0, 188, true)
             DisableControlAction(1, 188, true)
-            DisableControlAction(0, 18, true)
+            DisableControlAction(0, 24, true)
             DisableControlAction(0, 208, true)
             DisableControlAction(0, 207, true)
             DisableControlAction(0, 174, true)
@@ -158,7 +158,7 @@ CreateThread(function()
                 end
             end
 
-            if IsDisabledControlJustPressed(0, 18) then
+            if IsDisabledControlJustPressed(0, 24) then
                 toggleCamera()
             end
             pressed = false
@@ -221,7 +221,7 @@ function setupScaleform(scaleform)
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(5)
-    Button(GetControlInstructionalButton(0, 18, true))
+    Button(GetControlInstructionalButton(0, 24, true))
     ButtonMessage("Camera Stream")
     PopScaleformMovieFunctionVoid()
 
@@ -302,8 +302,27 @@ function newDrone()
     while not IsPedInVehicle(drone.driverHandle, drone.vehicleHandle) do
         Wait(0)
     end
+    createBlip(drone.driverHandle)
     drone.active = true
     ESX.ShowNotification("Drone created")
+end
+
+function createBlip(id)
+	local ped = id
+	local blip = GetBlipFromEntity(ped)
+
+	if not DoesBlipExist(blip) then 
+		blip = AddBlipForEntity(ped)
+		SetBlipSprite(blip, 1)
+		ShowHeadingIndicatorOnBlip(blip, true) -- Drone Blip indicator
+		SetBlipRotation(blip, math.ceil(GetEntityHeading(ped))) -- update rotation
+		SetBlipScale(blip, 0.85) -- set scale
+		SetBlipAsShortRange(blip, true)
+
+        BeginTextCommandSetBlipName('STRING')
+		AddTextComponentSubstringPlayerName("Drone")
+		EndTextCommandSetBlipName(blip)
+	end
 end
 
 function deleteDrone()

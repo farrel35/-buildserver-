@@ -117,8 +117,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'opinventory',
                 ['Name'] = 'Open Inventory',
-                ['Event'] = 'viewinv',
-                ['EventType'] = 'Command',
+                ['Event'] = 'Admin:OpenInv',
                 ['Collapse'] = true,
                 ['Options'] = {
                     {
