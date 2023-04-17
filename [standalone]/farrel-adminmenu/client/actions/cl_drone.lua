@@ -12,6 +12,10 @@ local drone = {
     landing = false,
     tablet = 0,
 }
+local fov_max = 80.0
+local fov_min = 5.0 -- max zoom level (smaller fov is more zoom)
+local zoomspeed = 3.0 -- camera zoom speed
+local fov = (fov_max+fov_min)*0.5
 
 CreateThread(function()
     while (true) do
@@ -55,8 +59,8 @@ CreateThread(function()
             DisableControlAction(0, 188, true)
             DisableControlAction(1, 188, true)
             DisableControlAction(0, 24, true)
-            DisableControlAction(0, 208, true)
-            DisableControlAction(0, 207, true)
+            DisableControlAction(0, 209, true)
+            DisableControlAction(0, 210, true)
             DisableControlAction(0, 174, true)
             DisableControlAction(0, 175, true)
             DisableControlAction(0, 173, true)
@@ -71,7 +75,7 @@ CreateThread(function()
            -- offSet.y = 0.0
            -- offSet.z = 0.0
             -- Moving Up
-            if IsDisabledControlPressed(0, 208) then
+            if IsDisabledControlPressed(0, 209) then
                 drone.landing = false
                 --local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 0.0, 3.0)
                 --offSet = offSet2
@@ -80,7 +84,7 @@ CreateThread(function()
             end
 
             -- Moving Down
-            if IsDisabledControlPressed(0, 207) then
+            if IsDisabledControlPressed(0, 210) then
                 --local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 0.0, -3.0)
                 --offSet = offSet2
                 zChange = -100.0
@@ -191,7 +195,7 @@ function setupScaleform(scaleform)
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(0)
-    Button(GetControlInstructionalButton(0, 208, true))
+    Button(GetControlInstructionalButton(0, 209, true))
     ButtonMessage("Up")
     PopScaleformMovieFunctionVoid()
 
@@ -376,7 +380,6 @@ function toggleCamera()
         TaskPlayAnim(ped, "amb@code_human_in_bus_passenger_idles@female@tablet@idle_a", "idle_a", 3.0, -8, -1, 63, 0, 0, 0, 0 )
         drone.cameraEnabled = true
         drone.cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-        
         --local boneIndex = GetEntityBoneIndexByName(drone.vehicleHandle, "chassis")
         local change = {}
         change.x = 0.0
@@ -386,6 +389,7 @@ function toggleCamera()
         --AttachCamToVehicleBone(drone.cameraHandle, drone.vehicleHandle, boneIndex, false, 0.0, 0.0, 0.0, -0.3, 0.0, 1.2, true)
         CreateThread(function()
             while DoesCamExist(drone.cameraHandle) do
+                HandleZoom(drone.cameraHandle)
                 local rotation = GetEntityRotation(drone.vehicleHandle, 1)
                 
                 if IsDisabledControlPressed(0, 172) then
@@ -400,15 +404,18 @@ function toggleCamera()
                 if IsDisabledControlPressed(0, 175) then
                     change.z = change.z - 1.0
                 end
+                
                 SetCamRot(drone.cameraHandle, rotation.x + change.x, rotation.y + change.y, rotation.z + change.z, 1)
+                
                 if not IsEntityPlayingAnim(ped, "amb@code_human_in_bus_passenger_idles@female@tablet@idle_a", "idle_a", 3) then
                     TaskPlayAnim(ped, "amb@code_human_in_bus_passenger_idles@female@tablet@idle_a", "idle_a", 3.0, -8, -1, 63, 0, 0, 0, 0 )
                 end
+                
                 Wait(0)
             end
             ClearPedTasks(ped)
         end)
-        local easeTime = 500 * math.ceil(GetDistanceBetweenCoords(GetEntityCoords(ped), GetEntityCoords(drone.vehicleHandle), true) / 10)
+        local easeTime = 100 * math.ceil(GetDistanceBetweenCoords(GetEntityCoords(ped), GetEntityCoords(drone.vehicleHandle), true) / 10)
 
         RenderScriptCams(1, 1, easeTime, 1, 1)
 
@@ -417,4 +424,18 @@ function toggleCamera()
         SetTimecycleModifier("scanline_cam_cheap")
         SetTimecycleModifierStrength(0.7)
     end
+end
+
+function HandleZoom(cam)
+	if IsControlJustPressed(0,241) then -- Scrollup
+		fov = math.max(fov - zoomspeed, fov_min)
+	end
+	if IsControlJustPressed(0,242) then
+		fov = math.min(fov + zoomspeed, fov_max) -- ScrollDown		
+	end
+	local current_fov = GetCamFov(cam)
+	if math.abs(fov-current_fov) < 0.1 then -- the difference is too small, just set the value directly to avoid unneeded updates to FOV of order 10^-5
+		fov = current_fov
+	end
+	SetCamFov(cam, current_fov + (fov - current_fov)*0.05) -- Smoothing of camera zoom
 end
