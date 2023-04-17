@@ -1,4 +1,4 @@
-local droneHash = `frogger`
+local droneHash = 'frogger'
 local speed = 120.0
 
 local drone = {
@@ -12,12 +12,6 @@ local drone = {
     landing = false,
     tablet = 0,
 }
-
-function showNotification(message)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString(message)
-    DrawNotification(0,1)
-end
 
 CreateThread(function()
     while (true) do
@@ -43,9 +37,9 @@ CreateThread(function()
                     NetworkRequestControlOfEntity(drone.vehicleHandle)
                 end
             else
-                showNotification("You have ~b~lost control ~w~of the drone, after going out of range")
+                ESX.ShowNotification("You have lost control of the drone, after going out of range")
                 for i = 5,1,-1 do 
-                    showNotification("Will be lost on " .. i)
+                    ESX.ShowNotification("Will be lost in " .. i)
                     Wait(1000)
                 end
                 deleteDrone()
@@ -81,7 +75,7 @@ CreateThread(function()
                 drone.landing = false
                 --local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 0.0, 3.0)
                 --offSet = offSet2
-                zChange = 3.0
+                zChange = 100.0
                 pressed = true 
             end
 
@@ -89,37 +83,48 @@ CreateThread(function()
             if IsDisabledControlPressed(0, 207) then
                 --local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 0.0, -3.0)
                 --offSet = offSet2
-                zChange = -3.0
+                zChange = -100.0
                 pressed = true
             end
-
-            if (IsDisabledControlPressed(0, 172)) then
-                local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 5.0, 0.0)
+            DisableControlAction(0, 32)
+            DisableControlAction(0, 33)
+            DisableControlAction(0, 34)
+            DisableControlAction(0, 35)
+            if (IsDisabledControlPressed(0, 32)) then
+                local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, 100.0, 0.0)
                 offSet = offSet2
                 pressed = true
             end
 
             -- Backward
-            if (IsDisabledControlPressed(0, 173)) then
-                local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, -5.0, 0.0)
+            if (IsDisabledControlPressed(0, 33)) then
+                local offSet2 = GetOffsetFromEntityInWorldCoords(drone.vehicleHandle, 0.0, -100.0, 0.0)
                 offSet = offSet2
                 pressed = true
             end
 
             -- Left
-            if (IsDisabledControlPressed(0, 174)) then
-                targetHeading = targetHeading + 45.0
+            if (IsDisabledControlPressed(0, 34)) then
+                targetHeading = targetHeading + 90.0
+                
                 pressed = true
             end
 
             -- Right
-            if (IsDisabledControlPressed(0, 175)) then
-                targetHeading = targetHeading - 45.0
+            if (IsDisabledControlPressed(0, 35)) then
+                targetHeading = targetHeading - 90.0
+
+                if targetHeading <= 0 then
+                    targetHeading = 300
+                end
+                
                 pressed = true
             end
+
             if not drone.landing then
                 TaskHeliMission(drone.driverHandle, drone.vehicleHandle, nil, nil, offSet.x, offSet.y, offSet.z + zChange, 4, speed, 1.0, targetHeading, -1, -1, -1, 0)
             end
+            
             -- Land
             if (IsDisabledControlJustPressed(0, 121)) then
                 drone.landing = true
@@ -129,7 +134,7 @@ CreateThread(function()
             end
 
             -- Camera
-            if IsControlJustPressed(0, 212) then
+            if IsControlJustPressed(0, 101) then
                 if (drone.cameraEnabled) then
                     if (drone.nightVisionEnabled) then
                         SetNightvision(false)
@@ -141,7 +146,7 @@ CreateThread(function()
                 end
             end
 
-            if IsControlJustPressed(0, 214) then
+            if IsControlJustPressed(0, 51) then
                 if (drone.cameraEnabled) then
                     if (drone.thermalEnabled) then
                         SetSeethrough(false)
@@ -192,25 +197,25 @@ function setupScaleform(scaleform)
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(1)
-    Button(GetControlInstructionalButton(0, 175, true))
+    Button(GetControlInstructionalButton(0, 35, true))
     ButtonMessage("Turn Right")
     PopScaleformMovieFunctionVoid()
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(2)
-    Button(GetControlInstructionalButton(0, 174, true)) -- The button to display
+    Button(GetControlInstructionalButton(0, 34, true)) -- The button to display
     ButtonMessage("Turn Left") -- the message to display next to it
     PopScaleformMovieFunctionVoid()
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(3)
-    Button(GetControlInstructionalButton(0, 173, true))
+    Button(GetControlInstructionalButton(0, 33, true))
     ButtonMessage("Backward")
     PopScaleformMovieFunctionVoid()
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(4)
-    Button(GetControlInstructionalButton(0, 172, true))
+    Button(GetControlInstructionalButton(0, 32, true))
     ButtonMessage("Forward")
     PopScaleformMovieFunctionVoid()
 
@@ -222,13 +227,13 @@ function setupScaleform(scaleform)
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(6)
-    Button(GetControlInstructionalButton(0, 212, true))
+    Button(GetControlInstructionalButton(0, 101, true))
     ButtonMessage("Night Vision")
     PopScaleformMovieFunctionVoid()
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(7)
-    Button(GetControlInstructionalButton(0, 214, true))
+    Button(GetControlInstructionalButton(0, 51, true))
     ButtonMessage("Thermal Imaging")
     PopScaleformMovieFunctionVoid()
 
@@ -271,7 +276,7 @@ end
 function newDrone()
     local modelHash = droneHash
     loadModel(modelHash)
-    local pedModel = `s_m_m_bouncer_01`
+    local pedModel = 's_m_m_bouncer_01'
     loadModel(pedModel)
     local ped = PlayerPedId()
     local coords = GetOffsetFromEntityInWorldCoords(ped, 0.0, 4.0, 0.0)
@@ -280,6 +285,7 @@ function newDrone()
     while not DoesEntityExist(drone.vehicleHandle) do Wait(0) end
     SetModelAsNoLongerNeeded(modelHash)
     Wait(1000)
+    FreezeEntityPosition(ped, true)
     SetEntityAsMissionEntity(drone.vehicleHandle, true, true)
     local netVeh = NetworkGetNetworkIdFromEntity(drone.vehicleHandle)
     NetworkSetNetworkIdDynamic(netVeh, true)
@@ -297,7 +303,7 @@ function newDrone()
         Wait(0)
     end
     drone.active = true
-    showNotification("Drone ~b~created~w~.")
+    ESX.ShowNotification("Drone created")
 end
 
 function deleteDrone()
@@ -310,7 +316,8 @@ function deleteDrone()
     if drone.cameraEnabled then
         toggleCamera()
     end
-    showNotification("Drone ~b~removed~w~.")
+    FreezeEntityPosition(PlayerPedId(), false)
+    ESX.ShowNotification("Drone removed")
 end
 
 function toggleCamera()
@@ -339,7 +346,7 @@ function toggleCamera()
             drone.thermalEnabled = false
         end
     else
-        local modelHash = `prop_cs_tablet`
+        local modelHash = 'prop_cs_tablet'
         loadModel(modelHash)
         drone.tablet = CreateObject(modelHash, GetEntityCoords(ped), true)
         AttachEntityToEntity(drone.tablet, ped, GetPedBoneIndex(ped, 28422), -0.03, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
@@ -361,20 +368,17 @@ function toggleCamera()
         CreateThread(function()
             while DoesCamExist(drone.cameraHandle) do
                 local rotation = GetEntityRotation(drone.vehicleHandle, 1)
-                DisableControlAction(0, 32)
-                DisableControlAction(0, 33)
-                DisableControlAction(0, 34)
-                DisableControlAction(0, 35)
-                if IsDisabledControlPressed(0, 32) then
+                
+                if IsDisabledControlPressed(0, 172) then
                     change.x = change.x + 1.0
                 end
-                if IsDisabledControlPressed(0, 33) then
+                if IsDisabledControlPressed(0, 173) then
                     change.x = change.x - 1.0
                 end
-                if IsDisabledControlPressed(0, 34) then
+                if IsDisabledControlPressed(0, 174) then
                     change.z = change.z + 1.0
                 end
-                if IsDisabledControlPressed(0, 35) then
+                if IsDisabledControlPressed(0, 175) then
                     change.z = change.z - 1.0
                 end
                 SetCamRot(drone.cameraHandle, rotation.x + change.x, rotation.y + change.y, rotation.z + change.z, 1)

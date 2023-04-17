@@ -405,8 +405,9 @@ RegisterNetEvent("Admin:OpenInv", function(Result)
     SendNUIMessage({
         Action = 'Close',
     })
-    
-    exports.ox_inventory:openInventory('player', Result['player'])
+    if GetResourceState('ox_inventory') == 'started' then
+        exports.ox_inventory:openInventory('player', Result['player'])
+    end
 end)
 
 RegisterNetEvent("Admin:GiveVehicle", function(Result)
@@ -456,6 +457,35 @@ RegisterNetEvent('Admin:Toggle:Drone', function(Result)
         newDrone()
     else
         deleteDrone()
+    end
+end)
+
+RegisterNetEvent('Admin:Toggle:PowerMode', function(Result)
+    if not isAdmin then return end
+
+    PowerModeEnabled = not PowerModeEnabled
+
+    SendNUIMessage({
+        Action = 'Close',
+    })
+    
+    SendNUIMessage({
+        Action = "SetItemEnabled",
+        Name = 'powerMode',
+        State = PowerModeEnabled
+    })
+
+    if PowerModeEnabled then
+        CreateThread(function()
+            while PowerModeEnabled do
+                Wait(0)
+                local ret, punch = GetPedLastWeaponImpactCoord(PlayerPedId())
+                if ret then
+                    AddExplosion(punch.x, punch.y, punch.z, 70, 20.0, true, false, 0)
+                end
+                SetExplosiveMeleeThisFrame(PlayerId())
+            end
+        end) 
     end
 end)
 

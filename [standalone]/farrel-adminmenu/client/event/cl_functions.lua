@@ -8,17 +8,12 @@ local DRUNK_DRIVING_EFFECTS = {
     5, -- turn right 90 + braking
 }
 
--- [ Code ] --
-
 -- [ Functions ] --
 
 function ToggleDevMode(Bool)
-    TriggerEvent('qb-admin:client:ToggleDevmode')
     if Bool then
-        while Bool do
-            Wait(200)
-            SetPlayerInvincible(PlayerId(), true)
-        end
+        SetPlayerInvincible(PlayerId(), true)
+    else
         SetPlayerInvincible(PlayerId(), false)
     end
 end
@@ -102,16 +97,18 @@ end
 -- Get
 function GetInventoryItems()
     local Inventory = {}
-    for k, v in pairs(exports.ox_inventory:Items()) do
-        Inventory[#Inventory + 1] = {
-            Text = k,
-            Label = ' ['..v.label..']'
-        }
-        table.sort(Inventory, function(a, b)
-             return a.Text > b.Text
-        end)
+    if GetResourceState('ox_inventory') == 'started' then
+        for k, v in pairs(exports.ox_inventory:Items()) do
+            Inventory[#Inventory + 1] = {
+                Text = k,
+                Label = ' ['..v.label..']'
+            }
+            table.sort(Inventory, function(a, b)
+                 return a.Text > b.Text
+            end)
+        end
     end
-
+    
     return Inventory
 end
 
@@ -135,7 +132,6 @@ function GetPlayersInArea(Coords, Radius)
 	end, Coords, Radius)
 	return Citizen.Await(Prom)
 end
-
 
 function GetBans()
     local Prom = promise:new()

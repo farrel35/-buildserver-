@@ -464,8 +464,15 @@ Config.AdminMenus = {
             },
             {
                 ['Id'] = 'drone',
-                ['Name'] = 'Drone',
+                ['Name'] = 'Play Drone',
                 ['Event'] = 'Admin:Toggle:Drone',
+                ['EventType'] = 'Client',
+                ['Collapse'] = false,
+            },
+            {
+                ['Id'] = 'powerMode',
+                ['Name'] = 'Power Mode',
+                ['Event'] = 'Admin:Toggle:PowerMode',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
             },
