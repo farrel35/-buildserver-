@@ -16,7 +16,7 @@ function UpdateMenu()
         Debug = Config.Settings['Debug'],
         Bans = Bans,
         AllPlayers = Players,
-        AdminItems = Config.AdminMenus,
+        AdminItems = GetListMenu(),
         Favorited = Config.FavoritedItems,
     })
 end
@@ -85,6 +85,66 @@ function DeletePlayerBlips()
 end
 
 -- Get
+
+function DoesItemExistInTable(FilteredListMenu, Category, CommandItem)
+    for i=1, #FilteredListMenu do
+        local Item = FilteredListMenu[i]
+        if Item['Id'] == CommandItem['Id'] then
+            return true
+        end
+    end
+    return false
+end
+
+function GetListMenu()
+    if playerRank == nil then 
+		print('get rank again')
+    
+        ESX.TriggerServerCallback('farrel-adminmenu/server/get-playerrank', function(rank)
+            playerRank = rank
+        end) 
+
+		Wait(500)
+	end
+    local Prom = promise:new()
+    local FilteredListMenu = {}
+
+    if next(Config.AdminMenus) ~= nil then
+        for i = 1, #Config.AdminMenus do -- Categories
+            local Category = Config.AdminMenus[i]
+            FilteredListMenu[Category['Id']] = {
+                ['Id'] = Category['Id'],
+                ['Name'] = Category['Name'],
+                ['Items'] = {},
+            }
+            for u = 1, #Category['Items'] do -- Category Items
+                local CommandItem = Category['Items'][u]
+                local Command = Category['Id']
+                if CommandItem['Groups'] ~= nil then
+                    for j = 1, #CommandItem['Groups'] do
+                        local Group = playerRank
+                        local CommandGroup = CommandItem['Groups'][j]:lower()
+                        if Group and (Bool ~= nil and CommandGroup == Group and Bool) or (Bool == nil and CommandGroup == Group) or CommandGroup == 'all' then -- CommandGroup is user group or 'all' then 
+                            if not DoesItemExistInTable(FilteredListMenu[Command]['Items'], Category, CommandItem) then
+                                FilteredListMenu[Command]['Items'][#FilteredListMenu[Command]['Items'] + 1] = CommandItem
+                            end
+                        end
+                    end
+                else
+                    if not DoesItemExistInTable(FilteredListMenu[Command]['Items'], Category, CommandItem) then
+                        FilteredListMenu[Command]['Items'][#FilteredListMenu[Command]['Items'] + 1] = CommandItem
+                    end
+                end
+            end
+        end
+    else
+        print('No commands found to filter, check the Config.AdminMenus for typos.')
+    end
+    Prom:resolve(FilteredListMenu)
+
+    return Citizen.Await(Prom)
+end
+
 function GetInventoryItems()
     local Inventory = {}
     if GetResourceState('ox_inventory') == 'started' then

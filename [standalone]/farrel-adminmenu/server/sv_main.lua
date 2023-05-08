@@ -31,6 +31,11 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-permission', function(so
     Cb(admin)
 end)
 
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-playerrank', function(source, Cb)
+    local rank = getPlayerRank(source)
+    Cb(rank)
+end)
+
 ESX.RegisterServerCallback('farrel-adminmenu/server/get-active-players-in-radius', function(Source, Cb, Coords, Radius)
 	local Coords, Radius = Coords ~= nil and vector3(Coords.x, Coords.y, Coords.z) or GetEntityCoords(GetPlayerPed(Source)), Radius ~= nil and Radius or 5.0
     local ActivePlayers = {}

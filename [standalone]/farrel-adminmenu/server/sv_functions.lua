@@ -1,7 +1,13 @@
 
-function IsPlayerAdmin(ServerId)
+function getPlayerRank(ServerId)
     local xPlayer = ESX.GetPlayerFromId(ServerId)
-    if xPlayer.group == 'admin' then
+    return xPlayer.group
+end
+
+function IsPlayerAdmin(ServerId)
+    local GroupRank = getPlayerRank(ServerId)
+
+    if GroupRank == "superadmin" or GroupRank == "admin" then
         return true
     end
 end

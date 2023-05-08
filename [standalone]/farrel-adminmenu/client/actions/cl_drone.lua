@@ -398,10 +398,10 @@ function toggleCamera()
                 if IsDisabledControlPressed(0, 173) then
                     change.x = change.x - 1.0
                 end
-                if IsDisabledControlPressed(0, 174) then
+                if IsDisabledControlPressed(0, 175) then
                     change.z = change.z + 1.0
                 end
-                if IsDisabledControlPressed(0, 175) then
+                if IsDisabledControlPressed(0, 174) then
                     change.z = change.z - 1.0
                 end
                 

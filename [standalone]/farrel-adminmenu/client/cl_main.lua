@@ -6,6 +6,7 @@ AddEventHandler('esx:playerLoaded', function()
     ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
+
     LoggedIn = true
 end)
 
@@ -14,6 +15,7 @@ AddEventHandler('esx:onPlayerDeath', function()
     ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
+
     LoggedIn = false
 end)
 
@@ -23,6 +25,7 @@ AddEventHandler('esx:setJob', function(job)
     ESX.TriggerServerCallback('farrel-adminmenu/server/get-permission', function(admin)
         isAdmin = admin
     end)
+    
     LoggedIn = true
 end)
 
@@ -81,6 +84,7 @@ RegisterCommand('adminmenu', function(source, args, RawCommand)
             isAdmin = admin
         end)
         LoggedIn = true
+        
 		Wait(500)
 	end
    
@@ -102,7 +106,7 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
         Debug = Config.Settings['Debug'],
         Bans = Bans,
         AllPlayers = Players,
-        AdminItems = Config.AdminMenus,
+        AdminItems = GetListMenu(),
         Favorited = Config.FavoritedItems,
     })
 end)
