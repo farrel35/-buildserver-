@@ -4,6 +4,6 @@ Config.FavoritedItems = {}
 Config.AdminOptions = {}
 
 Config.Settings = {
-    ['Debug'] = true,
+    ['Debug'] = false,
     ['DefaultOpenKeybind'] = 'INSERT',
 }

@@ -57,16 +57,16 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-bans', function(source, 
     local BansData = MySQL.Sync.fetchAll('SELECT * FROM bans', {})
     if BansData and BansData[1] ~= nil then
         for k, v in pairs(BansData) do
-                BanList[#BanList + 1] = {
-                    Text = v.banid .. " - " .. v.identifier .. " - " .. v.name,
-                    BanId = v.banid,
-                    Name = v.name,
-                    Reason = v.reason,
-                    Expires = os.date('*t', tonumber(v.expire)),
-                    BannedOn = os.date('*t', tonumber(v.bannedon)),
-                    BannedOnN = v.bannedon,
-                    BannedBy = v.bannedby,
-                }
+            BanList[#BanList + 1] = {
+                Text = v.banid .. " - " .. v.steam .. " - " .. v.name,
+                BanId = v.banid,
+                Name = v.name,
+                Reason = v.reason,
+                Expires = os.date('*t', tonumber(v.expire)),
+                BannedOn = os.date('*t', tonumber(v.bannedon)),
+                BannedOnN = v.bannedon,
+                BannedBy = v.bannedby,
+            }
         end
     end
     Cb(BanList)
@@ -120,11 +120,11 @@ RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expire
             local ExpireHours = tonumber(Expiring['hour']) < 10 and "0"..Expiring['hour'] or Expiring['hour']
             local ExpireMinutes = tonumber(Expiring['min']) < 10 and "0"..Expiring['min'] or Expiring['min']
             local ExpiringDate = Expiring['day'] .. '/' .. Expiring['month'] .. '/' .. Expiring['year'] .. ' | '..ExpireHours..':'..ExpireMinutes
-            -- if Expires == "Permanent" then
-            --     DropPlayer(ServerId,  _U('perm_banned', Reason))
-            -- else
-            --     DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
-            -- end
+            if Expires == "Permanent" then
+                DropPlayer(ServerId,  _U('perm_banned', Reason))
+            else
+                DropPlayer(ServerId, _U('banned', BanId, Reason, Expires, GetPlayerName(src)))
+            end
         end
     else
         local Steam = ServerId

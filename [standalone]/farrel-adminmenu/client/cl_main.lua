@@ -87,7 +87,7 @@ RegisterCommand('adminmenu', function(source, args, RawCommand)
         
 		Wait(500)
 	end
-   
+
     TriggerEvent('farrel-adminmenu/client/try-open-menu') 
 end, false)
 
@@ -98,6 +98,7 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
 
     local Bans = GetBans()
     local Players = GetPlayers()
+    local Menu = GetListMenu()
 
     SetCursorLocation(0.87, 0.15)
     SetNuiFocus(true, true)
@@ -106,7 +107,7 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
         Debug = Config.Settings['Debug'],
         Bans = Bans,
         AllPlayers = Players,
-        AdminItems = GetListMenu(),
+        AdminItems = Menu,
         Favorited = Config.FavoritedItems,
     })
 end)

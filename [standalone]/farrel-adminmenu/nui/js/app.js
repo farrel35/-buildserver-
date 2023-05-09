@@ -47,13 +47,11 @@ FARREL.AdminMenu.Open = function(Data) {
     DebugMessage(`Menu Opening`);
     $('.menu-main-container').css('pointer-events', 'auto');
     $('.menu-main-container').fadeIn(450, function() {
-        if (FARREL.AdminMenu.Items == null && FARREL.AdminMenu.Players == null) {
-            FARREL.AdminMenu.Players = Data.AllPlayers
-            FARREL.AdminMenu.Items = Data.AdminItems
-            $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
-            FARREL.AdminMenu.LoadCategory(FARREL.AdminMenu.Sidebar.Selected);
-        };
+
         FARREL.AdminMenu.Players = Data.AllPlayers
+        FARREL.AdminMenu.Items = Data.AdminItems
+        $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
+        FARREL.AdminMenu.LoadCategory(FARREL.AdminMenu.Sidebar.Selected);
         FARREL.AdminMenu.Opened = true;
     });
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {

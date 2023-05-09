@@ -6,7 +6,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'noclip',
                 ['Name'] = 'Noclip',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:Noclip',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -14,7 +14,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'changeModel',
                 ['Name'] = 'Change Model',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Change:Model',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -35,7 +35,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'clone',
                 ['Name'] = 'Clone',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Change:Clone',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -50,7 +50,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'rmodel',
                 ['Name'] = 'Reset Model',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Reset:Model',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -65,7 +65,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'clothing',
                 ['Name'] = 'Clothing',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Open:Clothing',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -80,7 +80,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'armor',
                 ['Name'] = 'Armor',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Armor',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -95,7 +95,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'food-drink',
                 ['Name'] = 'Food & Drink',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Food:Drink',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -110,7 +110,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'godmode',
                 ['Name'] = 'Godmode',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Godmode',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -125,7 +125,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'opinventory',
                 ['Name'] = 'Open Inventory',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:OpenInv',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -140,7 +140,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'revive',
                 ['Name'] = 'Revive',
-                ['Groups'] = {'admin'},
+                ['Groups'] ={'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Revive',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -155,7 +155,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'reviveRadius',
                 ['Name'] = 'Revive in Radius',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'farrel-adminmenu/server/revive-in-distance',
                 ['EventType'] = 'Server',
                 ['Collapse'] = false,
@@ -163,7 +163,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'removeStress',
                 ['Name'] = 'Remove Stress',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Remove:Stress',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -184,7 +184,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'playerblips',
                 ['Name'] = 'Player Blips',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:PlayerBlips',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -192,7 +192,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'playernames',
                 ['Name'] = 'Player Names',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:PlayerNames',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -200,14 +200,14 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'deleteVehicle',
                 ['Name'] = 'Delete Vehicle',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Delete:Vehicle',
                 ['Collapse'] = false,
             },
             {
                 ['Id'] = 'spawnVehicle',
                 ['Name'] = 'Spawn Vehicle',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Spawn:Vehicle',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -222,7 +222,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'fixVehicle',
                 ['Name'] = 'Fix Vehicle',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Fix:Vehicle',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -230,7 +230,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'entityFreeAim',
                 ['Name'] = 'View Free Aim',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:FreeAim',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -238,7 +238,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'entityVehicle',
                 ['Name'] = 'View Vehicle',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:ViewVehicle',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -246,7 +246,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'entityObject',
                 ['Name'] = 'View Object',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:ViewObject',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -254,7 +254,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'entityPed',
                 ['Name'] = 'View Ped',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:ViewPed',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -262,7 +262,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'teleport',
                 ['Name'] = 'Teleport',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Teleport',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -296,7 +296,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'teleportCoords',
                 ['Name'] = 'Teleport Coords',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Teleport:Coords',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -323,7 +323,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'teleportMarker',
                 ['Name'] = 'Teleport Marker',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Teleport:Marker',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -331,7 +331,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'chatSay',
                 ['Name'] = 'cSay',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Chat:Say',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -346,7 +346,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'copyCoords',
                 ['Name'] = 'Copy Coords',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Copy:Coords',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -407,7 +407,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'flingPlayer',
                 ['Name'] = 'Fling Player',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Fling:Player',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -422,7 +422,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'drunkPlayer',
                 ['Name'] = 'Make Player Drunk',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Drunk',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -437,7 +437,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'animalattackPlayer',
                 ['Name'] = 'Animal Attack',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Animal:Attack',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -452,7 +452,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'setfirePlayer',
                 ['Name'] = 'Set On Fire',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Set:Fire',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -467,7 +467,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'soundPlayer',
                 ['Name'] = 'Play Sound',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Sound:Player',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -495,7 +495,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'drone',
                 ['Name'] = 'Play Drone',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:Drone',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -503,7 +503,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'powerMode',
                 ['Name'] = 'Power Mode',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:PowerMode',
                 ['EventType'] = 'Client',
                 ['Collapse'] = false,
@@ -517,7 +517,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'setjob',
                 ['Name'] = 'Request Job',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:Request:Job',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -538,7 +538,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'giveItem',
                 ['Name'] = 'Give Item',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:GiveItem',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -565,7 +565,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'banPlayerOffline',
                 ['Name'] = 'Ban Player Offline',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:BanOffline',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -614,7 +614,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'banPlayer',
                 ['Name'] = 'Ban Player',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Ban',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -663,7 +663,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'unbanPlayer',
                 ['Name'] = 'Unban Player',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Unban',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -678,7 +678,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'kickPlayer',
                 ['Name'] = 'Kick Player',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Kick',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -699,7 +699,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'spectate',
                 ['Name'] = 'Spectate Player',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin', 'moderator'}, -- admin, moderator
                 ['Event'] = 'Admin:Toggle:Spectate',
                 ['EventType'] = 'Client',
                 ['Collapse'] = true,
@@ -715,7 +715,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'givevehicle',
                 ['Name'] = 'Give Vehicle',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:GiveVehicle',
                 ['Collapse'] = true,
                 ['Options'] = {
@@ -742,7 +742,7 @@ Config.AdminMenus = {
             {
                 ['Id'] = 'givevehicleoff',
                 ['Name'] = 'Give Vehicle Offline',
-                ['Groups'] = {'admin'},
+                ['Groups'] = {'admin'}, -- admin, moderator
                 ['Event'] = 'Admin:GiveVehicleOffline',
                 ['Collapse'] = true,
                 ['Options'] = {
