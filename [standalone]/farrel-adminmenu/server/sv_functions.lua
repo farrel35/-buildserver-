@@ -62,3 +62,24 @@ function GetIdentifier(Source, Type)
     Prom:resolve(Identifier)
     return Citizen.Await(Prom)
 end
+
+
+function CreateLog(Source, Type, Log, Data)
+    local source = Source
+
+    if Type == nil or Log == nil then return end
+
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local Name = GetPlayerName(source)
+    local Steam = GetIdentifier(source, "steam")
+    
+    if xPlayer ~= nil then
+        MySQL.insert('INSERT INTO logs (type, name, steam, log, data) VALUES (?, ?, ?, ?, ?)', {
+            Type,
+            Name,
+            Steam,
+            Log,
+            Data,
+        })
+    end
+end

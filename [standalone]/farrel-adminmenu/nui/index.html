@@ -23,6 +23,7 @@
 
     <link href="css/pages/actions.css" rel="stylesheet" type="text/css"/>
     <link href="css/pages/playerlist.css" rel="stylesheet" type="text/css"/>
+    <link href="css/pages/playerlogs.css" rel="stylesheet" type="text/css"/>
 </head>
     <body>
         <div class="menu-main-container">
@@ -40,6 +41,10 @@
                     <div class="menu-sidebar-action" data-Action="PlayerList">
                         <span class="ui-tooltip-left-text">Player List</span>
                         <i class="fas fa-list-ul"></i>
+                    </div>
+                    <div class="menu-sidebar-action" data-Action="PlayerLogs">
+                        <span class="ui-tooltip-left-text">Player Logs</span>
+                        <i class="fa-solid fa-book-open"></i>
                     </div>
                     <!-- Lower -->
                     <div class="menu-sidebar-action lower" data-Action="DevMode">
@@ -85,6 +90,53 @@
                         <!-- Auto Gen -->
                     </div>
                 </div>
+                <!-- Player Logs -->
+                <div class="menu-page" data-Page="PlayerLogs">
+                    <div class="menu-page-playerlogs-list-search"> <input type="text" name="log-type" id="log-type" placeholder="Search with Type"> <hr> </div>
+                    <div class="menu-page-playerlogs-list-search"> <input type="text" name="log-steam" id="log-steam" placeholder="Search with Steam"> <hr> </div>
+                    <div class="menu-page-playerlogs-list-search"> <input type="text" name="log-name" id="log-name" placeholder="Search with Name"> <hr> </div>
+                    <div class="admin-menu-logs">
+                        <div class="logs-availability"><i class="fa-regular fa-face-frown-slight"></i> <p>Sorry, logs are not available in this size.</p></div>
+                        <div class="admin-menu-logs-grid" style="display: none;">
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Type</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-types">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Steam</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-steam">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Name</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-name">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Log</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-desc">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Data</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-data">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                            <div class="admin-menu-logs-col">
+                                <div class="admin-menu-logs-col-title">Date</div>
+                                <div class="admin-menu-logs-col-contents" id="logs-date">
+                                    <!-- Auto Gen -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -99,9 +151,6 @@
 
     <script src="./js/pages/actions.js" type="text/javascript"></script>
     <script src="./js/pages/playerlist.js" type="text/javascript"></script>
-    <script src="./js/pages/recentbans.js" type="text/javascript"></script>
     <script src="./js/pages/playerlogs.js" type="text/javascript"></script>
-    <script src="./js/pages/chats.js" type="text/javascript"></script>
-    <script src="./js/pages/options.js" type="text/javascript"></script>
 </html>
 

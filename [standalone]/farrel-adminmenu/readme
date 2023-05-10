@@ -1,0 +1,2 @@
+// exports['farrel-adminmenu']:CreateLog('Menu', 'Open Menu')
+// exports['farrel-adminmenu']:CreateLog('Menu', 'Open Menu', "Data")

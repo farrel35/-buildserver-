@@ -15,6 +15,7 @@ FARREL.AdminMenu.FavoritedItems = {};
 FARREL.AdminMenu.EnabledItems = {};
 FARREL.AdminMenu.Bans = [];
 
+FARREL.AdminMenu.Logs = null;
 FARREL.AdminMenu.Players = null;
 FARREL.AdminMenu.Items = null;
 FARREL.AdminMenu.CurrentTarget = null;
@@ -33,9 +34,15 @@ FARREL.AdminMenu.Update = function(Data) {
     FARREL.AdminMenu.Players = Data.AllPlayers;
     FARREL.AdminMenu.Items = Data.AdminItems;
     FARREL.AdminMenu.Bans = Data.Bans;
+    FARREL.AdminMenu.Logs = Data.Logs;
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadPlayerLogs();
     } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerList') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerList();
     }
 }
@@ -47,7 +54,7 @@ FARREL.AdminMenu.Open = function(Data) {
     DebugMessage(`Menu Opening`);
     $('.menu-main-container').css('pointer-events', 'auto');
     $('.menu-main-container').fadeIn(450, function() {
-
+        FARREL.AdminMenu.Logs = Data.Logs;
         FARREL.AdminMenu.Players = Data.AllPlayers
         FARREL.AdminMenu.Items = Data.AdminItems
         $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
@@ -55,8 +62,13 @@ FARREL.AdminMenu.Open = function(Data) {
         FARREL.AdminMenu.Opened = true;
     });
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadPlayerLogs();
     } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerList') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerList();
     }
 }
@@ -89,8 +101,39 @@ FARREL.AdminMenu.ChangeSize = function(ForceSize) {
             right: 3+"%",
         });
     }
+    setTimeout(() => {
+        if (FARREL.AdminMenu.CheckMenuSize('Logs')) {
+            FARREL.AdminMenu.BuildPlayerLogs();
+        }
+    }, 350);
 }
+FARREL.AdminMenu.CheckMenuSize = function(Type) {
+    if (Type == 'Logs') {
+        if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
+            if (FARREL.AdminMenu.Size == 'Small') {
+                if ($(".menu-page-playerlogs-list-search").is(":visible")) {
+                    $('.menu-page-playerlogs-list-search').hide();
+                }
+                if ($(".admin-menu-logs-grid").is(":visible")) {
+                    $('.admin-menu-logs-grid').hide();
+                }
+                $('.logs-availability').fadeIn(450);
+                return false
+            } else {
 
+                $('.logs-availability').hide();
+                $('.menu-page-playerlogs-list-search').fadeIn(250);
+                $('.admin-menu-logs-grid').fadeIn(450);
+                return true
+            }
+        }
+    }
+}
+FARREL.AdminMenu.ResetPage = function(Type) {
+    if (Type == 'All') {
+        $('.menu-page-options-items').hide();
+    }
+}
 FARREL.AdminMenu.Copy = function(Text) {
     let TextArea = document.createElement('textarea');
     let Selection = document.getSelection();

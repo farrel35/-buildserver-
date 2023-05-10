@@ -8,6 +8,9 @@ FARREL.AdminMenu.LoadCategory = function(Category) {
         FARREL.AdminMenu.LoadItems();
     } else if (Category == 'PlayerList') {
         FARREL.AdminMenu.LoadPlayerList();
+    } else if (Category == 'PlayerLogs') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadPlayerLogs();
     }
 }
 

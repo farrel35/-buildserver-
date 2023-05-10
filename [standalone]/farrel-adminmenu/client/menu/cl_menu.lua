@@ -3,12 +3,14 @@ function UpdateMenu()
     local Bans = GetBans()
     local Players = GetPlayers()
     local Menu = GetListMenu()
+    local Logs = GetLogs()
     
     SendNUIMessage({
         Action = 'Update',
         Debug = Config.Settings['Debug'],
         Bans = Bans,
         AllPlayers = Players,
+        Logs = Logs,
         AdminItems = Menu,
         Favorited = Config.FavoritedItems,
     })
@@ -62,12 +64,7 @@ function DoesItemExistInTable(FilteredListMenu, Category, CommandItem)
 end
 
 function GetListMenu()
-    print('get rank')
-    ESX.TriggerServerCallback('farrel-adminmenu/server/get-playerrank', function(rank)
-        playerRank = rank
-    end) 
-
-	Wait(500)
+    
     local Prom = promise:new()
     local FilteredListMenu = {}
 

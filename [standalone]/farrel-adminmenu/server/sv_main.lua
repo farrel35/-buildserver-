@@ -51,7 +51,23 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-active-players-in-radius
 	end
 	Cb(ActivePlayers)
 end)
-
+ESX.RegisterServerCallback('farrel-adminmenu/server/get-logs', function(source, Cb)
+    local LogsList = {}
+    local LogsData = MySQL.query.await('SELECT * FROM logs', {})
+    if LogsData and LogsData[1] ~= nil then
+        for k, v in pairs(LogsData) do
+            LogsList[#LogsList + 1] = {
+                Type = v.type ~= nil and v.type or _U('no_type'),
+                Steam = v.steam ~= nil and v.steam  or _U('no_desc'),
+                Name = v.name ~= nil and v.name or _U('no_name'),
+                Desc = v.log ~= nil and v.log or _U('no_Desc'),
+                Date = v.date ~= nil and v.date or _U('no_date'),
+                Data = v.data ~= nil and v.data or _U('no_data'),
+            }
+        end
+    end
+    Cb(LogsList)
+end)
 ESX.RegisterServerCallback('farrel-adminmenu/server/get-bans', function(source, Cb)
     local BanList = {}
     local BansData = MySQL.Sync.fetchAll('SELECT * FROM bans', {})
@@ -85,6 +101,12 @@ ESX.RegisterServerCallback('farrel-adminmenu/server/get-players', function(sourc
         }
     end
     Cb(PlayerList)
+end)
+
+ESX.RegisterServerCallback("farrel-adminmenu/server/create-log", function(source, Cb, Type, Log, Data)
+    if Type == nil or Log == nil then return end
+
+    CreateLog(source, Type, Log, Data)
 end)
 
 RegisterNetEvent("farrel-adminmenu/server/ban-player", function(ServerId, Expires, Reason, Type)
@@ -181,6 +203,7 @@ RegisterNetEvent("farrel-adminmenu/server/give-item", function(ServerId, ItemNam
     local xPlayer = ESX.GetPlayerFromId(ServerId)
     xPlayer.addInventoryItem(ItemName, ItemAmount)
     TriggerClientEvent('esx:showNotification', src, _U('gaveitem', ItemAmount, ItemName), 'success')
+    
 end)
 
 RegisterNetEvent("farrel-adminmenu/server/request-job", function(ServerId, JobName)

@@ -34,6 +34,11 @@ function DeletePlayerBlips()
     end
 end
 
+function CreateLog(Type, Log, Data)
+    ESX.TriggerServerCallback('farrel-adminmenu/server/create-log', function(result)
+    end, Type, Log, Data)
+end
+
 -- Get
 
 function GetInventoryItems()
@@ -78,6 +83,14 @@ function GetPlayers()
     local Prom = promise:new()
     ESX.TriggerServerCallback("farrel-adminmenu/server/get-players", function(Players)
         Prom:resolve(Players)
+    end)
+    return Citizen.Await(Prom)
+end
+
+function GetLogs()
+    local Prom = promise:new()
+    ESX.TriggerServerCallback("farrel-adminmenu/server/get-logs", function(Logs)
+        Prom:resolve(Logs)
     end)
     return Citizen.Await(Prom)
 end

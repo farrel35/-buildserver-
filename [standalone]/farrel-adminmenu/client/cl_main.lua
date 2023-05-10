@@ -95,10 +95,17 @@ end, false)
 
 RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
     if not isAdmin then return end
+    print('get rank')
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-playerrank', function(rank)
+        playerRank = rank
+    end) 
+
+	Wait(100)
 
     local Bans = GetBans()
     local Players = GetPlayers()
     local Menu = GetListMenu()
+    local Logs = GetLogs()
 
     SetCursorLocation(0.87, 0.15)
     SetNuiFocus(true, true)
@@ -107,9 +114,11 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
         Debug = Config.Settings['Debug'],
         Bans = Bans,
         AllPlayers = Players,
+        Logs = Logs,
         AdminItems = Menu,
         Favorited = Config.FavoritedItems,
     })
+
 end)
 
 RegisterNetEvent('farrel-adminmenu/client/force-close', function()
