@@ -33,7 +33,7 @@ Config.Cars = {
 	Blips = true, -- true = Use Car Blips.
 	PoundP = 300, -- How much it Costs to get Vehicles from Car Pound.
 	Markers = {
-		Points = {Type = 1, r = 0, g = 255, b = 0, x = 1.5, y = 1.5, z = 1.0}, -- Green Color / Standard Size Circle.
+		Points = {Type = 1, r = 0, g = 255, b = 0, x = 10.0, y =10.0, z = 1.0}, -- Green Color / Standard Size Circle.
 		Delete = {Type = 1, r = 255, g = 0, b = 0, x = 5.0, y = 5.0, z = 1.0}, -- Red Color / Big Size Circle.
 		Pounds = {Type = 1, r = 0, g = 0, b = 100, x = 1.5, y = 1.5, z = 1.0} -- Blue Color / Standard Size Circle.
 	}
@@ -50,8 +50,8 @@ Config.Pvt = {
 -- Start of Cars
 Config.CarGarages = {
 	Los_Santos = {
-		Marker = vector3(215.80, -810.06, 29.73),
-		Spawner = vector3(229.70, -800.12, 29.57),
+		Marker = vector3(228.8706, -796.1704, 30.61264),
+		Spawner = vector3(228.8706, -796.1704, 30.61264),
 		Deleter = vector3(223.80, -760.42, 29.65),
 		Heading = 157.84
 	},

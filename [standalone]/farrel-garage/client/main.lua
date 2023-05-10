@@ -46,7 +46,8 @@ local function has_value (tab, val)
 end
 
 -- Start of Car Code
-function ListOwnedCarsMenu()
+RegisterNetEvent('farrel-garage:ListOwnedCarsMenu')
+AddEventHandler('farrel-garage:ListOwnedCarsMenu', function()
 	if Vehicles == nil then 
 		print('get price again')
 		ESX.TriggerServerCallback('farrel-garage:getVehiclesInfo', function(vehicles)
@@ -89,7 +90,7 @@ function ListOwnedCarsMenu()
 		   	ESX.CreateMenu(menu)
 		end
 	end, garageName)
-end
+end)
 
 function getDamage(vehicle)
 	local tyres = {}
@@ -118,7 +119,8 @@ function getDamage(vehicle)
 	}
 end
 
-function StoreOwnedCarsMenu()
+RegisterNetEvent('farrel-garage:StoreOwnedCarsMenu')
+AddEventHandler('farrel-garage:StoreOwnedCarsMenu', function()
 	local playerPed  = PlayerPedId()
 
 	if IsPedInAnyVehicle(playerPed,  false) then
@@ -142,7 +144,7 @@ function StoreOwnedCarsMenu()
 	else
 		ESX.ShowNotification(_U('no_vehicle_to_enter'))
 	end
-end
+end)
 
 function ReturnOwnedCarsMenu()
 	if Vehicles == nil then 
@@ -231,7 +233,7 @@ function SpawnVehicle(vehicle, plate)
 				rwt = json.decode(v.rwt)
 			end
 			
-			ESX.Game.SpawnVehicle(vehicle.model, this_Garage.Spawner, this_Garage.Heading, function(callback_vehicle)
+			ESX.Game.SpawnVehicle(vehicle.model, GetEntityCoords(PlayerPedId()), this_Garage.Heading, function(callback_vehicle)
 				ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
 				SetVehRadioStation(callback_vehicle, "OFF")
 				SetVehicleFixed(callback_vehicle)
@@ -329,12 +331,7 @@ end
 AddEventHandler('farrel-garage:hasEnteredMarker', function(zone)
 	if zone == 'car_garage_point' then
 		CurrentAction = 'car_garage_point'
-		CurrentActionMsg = _U('press_to_enter')
-		CurrentActionData = {}
-	elseif zone == 'car_store_point' then
-		CurrentAction = 'car_store_point'
-		CurrentActionMsg = _U('press_to_delete')
-		CurrentActionData = {}
+		ESX.showTextUI(_U('press_to_enter'))
 	elseif zone == 'car_pound_point' then
 		CurrentAction = 'car_pound_point'
 		CurrentActionMsg = _U('press_to_impound')
@@ -344,7 +341,7 @@ end)
 
 -- Exited Marker
 AddEventHandler('farrel-garage:hasExitedMarker', function()
-	ESX.UI.Menu.CloseAll()
+	ESX.hideTextUI()
 	CurrentAction = nil
 end)
 
@@ -379,17 +376,17 @@ CreateThread(function()
 					end
 				end
 
-				if distance2 < Config.Main.DrawDistance then
-					letSleep = false
+				-- if distance2 < Config.Main.DrawDistance then
+				-- 	letSleep = false
 
-					if Config.Cars.Markers.Delete.Type ~= -1 then
-						DrawMarker(Config.Cars.Markers.Delete.Type, v.Deleter, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Cars.Markers.Delete.x, Config.Cars.Markers.Delete.y, Config.Cars.Markers.Delete.z, Config.Cars.Markers.Delete.r, Config.Cars.Markers.Delete.g, Config.Cars.Markers.Delete.b, 100, false, true, 2, false, nil, nil, false)
-					end
+				-- 	if Config.Cars.Markers.Delete.Type ~= -1 then
+				-- 		DrawMarker(Config.Cars.Markers.Delete.Type, v.Deleter, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Cars.Markers.Delete.x, Config.Cars.Markers.Delete.y, Config.Cars.Markers.Delete.z, Config.Cars.Markers.Delete.r, Config.Cars.Markers.Delete.g, Config.Cars.Markers.Delete.b, 100, false, true, 2, false, nil, nil, false)
+				-- 	end
 
-					if distance2 < Config.Cars.Markers.Delete.x then
-						garageName, isInMarker, this_Garage, currentZone = k, true, v, 'car_store_point'
-					end
-				end
+				-- 	if distance2 < Config.Cars.Markers.Delete.x then
+				-- 		garageName, isInMarker, this_Garage, currentZone = k, true, v, 'car_store_point'
+				-- 	end
+				-- end
 			end
 
 			for k,v in pairs(Config.CarPounds) do
@@ -454,52 +451,53 @@ CreateThread(function()
 		end
 
 		if letSleep then
-			Wait(500)
+			Wait(1000)
 		end
 	end
 end)
 
--- Key Controls
-CreateThread(function()
-	while true do
-		Wait(0)
-		local playerPed = PlayerPedId()
-		local playerVeh = GetVehiclePedIsIn(playerPed, false)
-		local model = GetEntityModel(playerVeh)
+-- -- Key Controls
+-- CreateThread(function()
+-- 	while true do
+-- 		Wait(0)
+-- 		local playerPed = PlayerPedId()
+-- 		local playerVeh = GetVehiclePedIsIn(playerPed, false)
+-- 		local model = GetEntityModel(playerVeh)
 
-		if CurrentAction then
-			ESX.ShowUI(CurrentActionMsg)
+-- 		if CurrentAction then
+-- 			ESX.showTextUI(CurrentActionMsg)
 
-			if IsControlJustReleased(0, 38) then
-				if CurrentAction == 'car_garage_point' then
-					ListOwnedCarsMenu()
-				elseif CurrentAction == 'car_store_point' then
-					if IsThisModelACar(model) or IsThisModelABicycle(model) or IsThisModelABike(model) or IsThisModelAQuadbike(model) then
-						if (GetPedInVehicleSeat(playerVeh, -1) == playerPed) then
-							StoreOwnedCarsMenu()
-						else
-							ESX.ShowNotification(_U('driver_seat'))
-						end
-					else
-						ESX.ShowNotification(_U('not_correct_veh'))
-					end
-				elseif CurrentAction == 'car_pound_point' then
-					ReturnOwnedCarsMenu()
-				end
+-- 			if IsControlJustReleased(0, 38) then
+-- 				if CurrentAction == 'car_garage_point' then
+-- 					ListOwnedCarsMenu()
+-- 				elseif CurrentAction == 'car_store_point' then
+-- 					if IsThisModelACar(model) or IsThisModelABicycle(model) or IsThisModelABike(model) or IsThisModelAQuadbike(model) then
+-- 						if (GetPedInVehicleSeat(playerVeh, -1) == playerPed) then
+-- 							StoreOwnedCarsMenu()
+-- 						else
+-- 							ESX.ShowNotification(_U('driver_seat'))
+-- 						end
+-- 					else
+-- 						ESX.ShowNotification(_U('not_correct_veh'))
+-- 					end
+-- 				elseif CurrentAction == 'car_pound_point' then
+-- 					ReturnOwnedCarsMenu()
+-- 				end
 
-				CurrentAction = nil
-			end
-		else
-			ESX.HideUI()
-			Wait(500)
-		end
-	end
-end)
+-- 				CurrentAction = nil
+-- 			end
+-- 		else
+-- 			ESX.hideTextUI()
+-- 			Wait(500)
+-- 		end
+-- 	end
+-- end)
 
 -- Create Blips
 CreateThread(function()
 	if Config.Cars.Garages and Config.Cars.Blips then
 		for k,v in pairs(Config.CarGarages) do
+			print(v.Marker)
 			local blip = AddBlipForCoord(v.Marker)
 
 			SetBlipSprite (blip, Config.Blips.Garages.Sprite)
@@ -572,22 +570,58 @@ function DrawTxt(text, x, y)
 	AddTextComponentString(text)
 	DrawText(x, y)
 end
-CreateThread(function()
-    while true do
-		Wait(0)
+
+-- CreateThread(function()
+--     while true do
+-- 		Wait(0)
 
 		
-		veheng = GetVehicleEngineHealth(GetVehiclePedIsUsing(PlayerPedId()))
-		vehbody = GetVehicleBodyHealth(GetVehiclePedIsUsing(PlayerPedId()))
+-- 		veheng = GetVehicleEngineHealth(GetVehiclePedIsUsing(PlayerPedId()))
+-- 		vehbody = GetVehicleBodyHealth(GetVehiclePedIsUsing(PlayerPedId()))
+-- 		if IsPedInAnyVehicle(PlayerPedId(), 1) then
+-- 			vehenground = tonumber(string.format("%.2f", veheng))
+-- 			vehbodround = tonumber(string.format("%.2f", vehbody))
+
+-- 			DrawTxt("~r~Engine Health: ~s~"..vehenground, 0.015, 0.76)
+
+-- 			DrawTxt("~r~Body Health: ~s~"..vehbodround, 0.015, 0.73)
+
+-- 			DrawTxt("~r~Vehicle Fuel: ~s~"..tonumber(string.format("%.2f", GetVehicleFuelLevel(GetVehiclePedIsUsing(PlayerPedId())))), 0.015, 0.70)
+-- 		end
+--     end
+-- end)
+
+local function UpdateRadialMenu()
+	print(CurrentAction)
+    local inGarage = CurrentAction
+    if inGarage ~= nil then
 		if IsPedInAnyVehicle(PlayerPedId(), 1) then
-			vehenground = tonumber(string.format("%.2f", veheng))
-			vehbodround = tonumber(string.format("%.2f", vehbody))
-
-			DrawTxt("~r~Engine Health: ~s~"..vehenground, 0.015, 0.76)
-
-			DrawTxt("~r~Body Health: ~s~"..vehbodround, 0.015, 0.73)
-
-			DrawTxt("~r~Vehicle Fuel: ~s~"..tonumber(string.format("%.2f", GetVehicleFuelLevel(GetVehiclePedIsUsing(PlayerPedId())))), 0.015, 0.70)
+			MenuItemId = exports['farrel-radialmenu']:AddOption({
+				id = 'open_garage_menu',
+				title = 'Masukan Kendaraan',
+				icon = 'warehouse',
+				type = 'client',
+				event = 'farrel-garage:StoreOwnedCarsMenu',
+				shouldClose = true
+			}, MenuItemId)
+		else
+			MenuItemId = exports['farrel-radialmenu']:AddOption({
+				id = 'open_garage_menu',
+				title = 'Garasi',
+				icon = 'warehouse',
+				type = 'client',
+				event = 'farrel-garage:ListOwnedCarsMenu',
+				shouldClose = true
+			}, MenuItemId)
 		end
+	else
+        if MenuItemId ~= nil then
+            exports['farrel-radialmenu']:RemoveOption(MenuItemId)
+            MenuItemId = nil
+        end
     end
+end
+
+RegisterNetEvent('qb-radialmenu:client:onRadialmenuOpen', function()
+    UpdateRadialMenu()
 end)
