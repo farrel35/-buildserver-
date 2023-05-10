@@ -22,6 +22,9 @@ files {
   'html/vendor/fonts/LatoBold2.woff2',
   'html/css/style.css',
 }
+shared_scripts { 
+	'@es_extended/imports.lua',
+}
 
 client_scripts {
   'client/cl_chat.lua',

@@ -1,6 +1,3 @@
-ESX = nil
-
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 
 function getIdentity(source)
@@ -85,6 +82,7 @@ RegisterCommand('pol', function(source, args, rawCommand)
     local name = getIdentity(source)
         if player ~= false then
             local user = GetPlayerName(source)
+            print(user)
             if job == 'police' then
                 TriggerClientEvent('chat:addMessage', -1, {
                 template = '<div class="chat-message polisi"><b>POLISI | {0}:</b> {1}</div>',
