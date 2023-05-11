@@ -1,5 +1,4 @@
 // [ ACTIONS ] \\
-
 FARREL.AdminMenu.Action.SelectedCat = null;
 FARREL.AdminMenu.Action.Selected = "All";
 
@@ -311,4 +310,10 @@ $(document).on('click', '.admin-menu-execute', function(e){
 $(document).on('click', 'body', function(e){
     if (FARREL.AdminMenu.IsGeneratingDropdown) return;
     if ($('.ui-styles-dropdown').length != 0 && $('.ui-styles-dropdown-search:hover').length == 0) $('.ui-styles-dropdown').remove();
+    EnableScroll(".admin-menu-items");
+});
+
+$(document).on('click', '.ui-styles-dropdown-search', function(e){
+    if (FARREL.AdminMenu.IsGeneratingDropdown) return;
+    if ($('.ui-styles-dropdown').length != 0) $('.ui-styles-dropdown').remove(); EnableScroll(".admin-menu-items");
 });
