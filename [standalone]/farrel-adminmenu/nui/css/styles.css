@@ -276,66 +276,78 @@
     position: absolute;
     top: 0;
     left: 0;
-
+  
     margin: 0;
-    padding: .8vh 0;
+    /* padding: .8vh 0; */
     position: relative;
     outline: 0;
-
-    min-width: 20vw;
+  
+    min-width: 0;
     width: max-content;
-
-    max-height: 50vh;
-
+    border-radius: 0.4vh;
+  
+    max-height: 0;
+  
     overflow-y: auto;
     overflow-x: hidden;
-
-    z-index: 999;
-
-    background-color: var(--menu-bg-color);
-}
-
-.ui-styles-dropdown::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.7);
+  
+    z-index: 1001;
+  
+    transition: max-height 0.1s ease-in-out;
+    background-color: white;
+  }
+  
+  .ui-styles-dropdown::-webkit-scrollbar-thumb {
+    background-color: rgba(161, 161, 161, 0.664);
     border-radius: 1vh;
-}
-
-.ui-styles-dropdown::-webkit-scrollbar {
+  }
+  
+  .ui-styles-dropdown::-webkit-scrollbar {
     background-color: transparent;
     width: 0.5vh;
-}
-
-.ui-styles-dropdown-item {
+  }
+  
+  .ui-styles-dropdown-item {
     cursor: pointer;
     user-select: none;
     vertical-align: middle;
-
-    font-family: 'Roboto';
+  
+    font-family: "Roboto";
     font-weight: 400;
     font-size: 1.4vh;
-
+  
     color: white;
-
-    padding: 0.6vh 0.8vw;
-
+    padding: 0.7vh 0.8vw;
+    margin: 0;
+  
     background-color: var(--menu-bg-color);
-}
-
-.ui-styles-dropdown-item > i {
+  }
+  
+  .ui-styles-dropdown-item:first-child {
+    padding: 1vh 0.8vw;
+  }
+  
+  .ui-styles-dropdown-item > i {
     width: 2.25vh;
-}
-
-.ui-styles-dropdown-item:hover {
+  }
+  
+  .ui-styles-dropdown-item:hover {
+    /* background-color: rgb(35, 49, 77); */
     background-color: rgb(35, 49, 77);
-}
-
-.ui-styles-dropdown-item > input {
+  }
+  
+  .ui-styles-dropdown-item > input {
     background-color: transparent;
     outline: none;
     border: none;
-    color: white;
-    font-size: 1vh;
-}
+    color: black;
+    font-size: 1.3vh;
+  }
+  
+  .ui-styles-dropdown-search {
+    color: rgb(73, 73, 73);
+  }
+  
 
 /* Checkbox Input */
 

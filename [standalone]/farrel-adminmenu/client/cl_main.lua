@@ -117,6 +117,7 @@ RegisterNetEvent('farrel-adminmenu/client/try-open-menu', function()
         Logs = Logs,
         AdminItems = Menu,
         Favorited = Config.FavoritedItems,
+        BanTypes = Config.BanTimeCategories,
     })
 
 end)
@@ -142,6 +143,14 @@ RegisterNUICallback('Admin/ToggleFavorite', function(Data, Cb)
     Cb('Ok')
 end)
 
+RegisterNUICallback("Admin/UnbanPlayer", function(Data, Cb)
+    TriggerServerEvent('farrel-adminmenu/server/unban-player', Data.PData.BanId)
+    SetTimeout(500, function()
+        UpdateMenu()
+    end)
+    Cb('Ok')
+end)
+
 RegisterNUICallback("Admin/Close", function(Data, Cb)
    SetNuiFocus(false, false)
    Cb('Ok')
@@ -151,6 +160,15 @@ RegisterNUICallback("Admin/DevMode", function(Data, Cb)
     local Bool = Data.Toggle
     ToggleDevMode(Bool)
     Cb('Ok')
+end)
+
+RegisterNUICallback("Admin/GetDateDifference", function(Data, Cb)
+    ESX.TriggerServerCallback('farrel-adminmenu/server/get-date-difference', function(FBans, CAmount)
+        Cb({
+            Bans = FBans, 
+            Amount = CAmount,
+        })
+    end, Data.BanList, Data.CType)
 end)
 
 RegisterNUICallback('Admin/TriggerAction', function(Data, Cb) 

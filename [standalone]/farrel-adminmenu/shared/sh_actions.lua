@@ -351,7 +351,6 @@ Config.AdminMenus = {
                 ['Collapse'] = true,
                 ['Options'] = {
                     {
-            
                         ['Id'] = 'type',
                         ['Name'] = 'Type',
                         ['Type'] = 'input-choice',             

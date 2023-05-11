@@ -24,6 +24,7 @@
     <link href="css/pages/actions.css" rel="stylesheet" type="text/css"/>
     <link href="css/pages/playerlist.css" rel="stylesheet" type="text/css"/>
     <link href="css/pages/playerlogs.css" rel="stylesheet" type="text/css"/>
+    <link href="css/pages/recentbans.css" rel="stylesheet" type="text/css"/>
 </head>
     <body>
         <div class="menu-main-container">
@@ -41,6 +42,10 @@
                     <div class="menu-sidebar-action" data-Action="PlayerList">
                         <span class="ui-tooltip-left-text">Player List</span>
                         <i class="fas fa-list-ul"></i>
+                    </div>
+                    <div class="menu-sidebar-action" data-Action="RecentBans">
+                        <span class="ui-tooltip-left-text">Recent Bans</span>
+                        <i class="fa-solid fa-gavel"></i>
                     </div>
                     <div class="menu-sidebar-action" data-Action="PlayerLogs">
                         <span class="ui-tooltip-left-text">Player Logs</span>
@@ -90,6 +95,20 @@
                         <!-- Auto Gen -->
                     </div>
                 </div>
+                
+                <!-- Recent Bans -->
+                <div class="menu-page" data-Page="RecentBans">
+                    <div class="menu-page-recentbans-list-search"> <input type="text" name="banslist-steam" id="banslist-steam" placeholder="Search with Steam"> <hr> </div>
+                    <div class="menu-page-recentbans-list-search"> <input type="text" name="banslist-discordid" id="banslist-discordid" placeholder="Search with Discord"> <hr> </div>
+                    <div class="menu-page-recentbans-types">
+                        <!-- Auto Gen -->
+                    </div>
+                    <div class="no-bans"><i class="fa-regular fa-ban"></i><p>Sorry, there are currently no bans.</p></div>
+                    <div class="admin-menu-bans">
+                        <!-- Auto Gen -->
+                    </div>
+                </div>
+
                 <!-- Player Logs -->
                 <div class="menu-page" data-Page="PlayerLogs">
                     <div class="menu-page-playerlogs-list-search"> <input type="text" name="log-type" id="log-type" placeholder="Search with Type"> <hr> </div>
@@ -151,6 +170,7 @@
 
     <script src="./js/pages/actions.js" type="text/javascript"></script>
     <script src="./js/pages/playerlist.js" type="text/javascript"></script>
+    <script src="./js/pages/recentbans.js" type="text/javascript"></script>
     <script src="./js/pages/playerlogs.js" type="text/javascript"></script>
 </html>
 

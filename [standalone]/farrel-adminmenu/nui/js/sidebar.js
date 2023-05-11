@@ -5,9 +5,14 @@ FARREL.AdminMenu.Sidebar.Selected = "Actions";
 FARREL.AdminMenu.LoadCategory = function(Category) {
     $('.menu-pages').find(`[data-Page="${FARREL.AdminMenu.Sidebar.Selected}"`).fadeIn(150);
     if (Category == 'Actions') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadItems();
     } else if (Category == 'PlayerList') {
+        FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerList();
+    } else if (Category == 'RecentBans') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadBanList();
     } else if (Category == 'PlayerLogs') {
         FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerLogs();

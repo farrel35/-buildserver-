@@ -93,12 +93,14 @@ FARREL.AdminMenu.BuildItems = function(Item) {
                                 };
                             };
                         };
-                        
+                        let LeftValue = Input.offset().left
+                        let TopValue = Input.offset().top
+                        let Width = Input.css('width');
                         if (SelectedItem.Options[Choice].Type.toLowerCase() == 'text-choice') {
-                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, false)
+                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, {x: LeftValue, y: TopValue, width: Width}, false)
                             Input.focus();
                         } else {
-                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, undefined, true)
+                            FARREL.AdminMenu.BuildDropdown(SelectedItem.Options[Choice].Choices, {x: LeftValue, y: TopValue, width: Width}, true)
                         }
                     };
 
@@ -139,11 +141,12 @@ FARREL.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
     if (Options.length == 0) return;
 
     FARREL.AdminMenu.IsGeneratingDropdown = true;
-
+    
     $('.ui-styles-dropdown').remove();
+    EnableScroll(".admin-menu-items");
     let DropdownDOM = ``;
 
-    if (HasSearch) DropdownDOM += `<div class="ui-styles-dropdown-item ui-styles-dropdown-search"><input type="text" placeholder="Search.."></div>`;
+    if (HasSearch) DropdownDOM += `<div class="ui-styles-dropdown-item ui-styles-dropdown-search"><input type="text" placeholder="Select..."></div>`;
     for (let i = 0; i < Options.length; i++) {
         const Elem = Options[i];
         
@@ -151,6 +154,7 @@ FARREL.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
             let DropdownOption = Options[Number(Element.getAttribute("DropdownId"))];
             DropdownOption.Callback(DropdownOption);
             $('.ui-styles-dropdown').remove();
+            EnableScroll(".admin-menu-items");
         };
 
         DropdownDOM += `<div DropdownId=${i} onclick="OnDropdownButtonClick(this)" class="ui-styles-dropdown-item">${Elem.Icon ? `<i class="${Elem.Icon}"></i> ` : ''}${Elem.Text}${Elem.Label != null ? Elem.Label : ""}</div>`;
@@ -165,21 +169,40 @@ FARREL.AdminMenu.BuildDropdown = (Options, CursorPos, HasSearch) => {
     let top = CursorPos != undefined && CursorPos.y || window.event.clientY;
     let left = CursorPos != undefined && CursorPos.x || window.event.clientX;
 
-    let DropdownHeight = Number($('.ui-styles-dropdown').css('height').replace('px', ''));
-    let DropdownWidth = Number($('.ui-styles-dropdown').css('width').replace('px', ''));
-
-    if (top + DropdownHeight >= screen.height) top = screen.height - DropdownHeight;
-    if (left + DropdownWidth >= screen.width) left = screen.width - (DropdownWidth + 10);
+    $('.ui-styles-dropdown').css('min-width', CursorPos.width)
+    let DropdownWidth = Number($('.ui-styles-dropdown').css('min-width').replace('px', ''));
 
     $('.ui-styles-dropdown').css({
         top: top,
         left: left,
+        "max-height": "50vh",
+        'min-width': DropdownWidth + 2,
+        'max-width': DropdownWidth + 2,
     })
+
+    $('.ui-styles-dropdown').animate({scrollTop: 0}, 1);
+    DisableScroll(".admin-menu-items");
 
     setTimeout(() => {
         FARREL.AdminMenu.IsGeneratingDropdown = false;
     }, 250);
 };
+
+function preventScroll(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    return false;
+}
+
+function DisableScroll(Element){
+    document.querySelector(Element).addEventListener('wheel', preventScroll);
+}
+  
+function EnableScroll(Element){
+    document.querySelector(Element).removeEventListener('wheel', preventScroll);
+}
+
 
 // [ SEARCH ] \\
 

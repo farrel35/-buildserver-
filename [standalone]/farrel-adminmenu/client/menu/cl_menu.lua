@@ -13,6 +13,7 @@ function UpdateMenu()
         Logs = Logs,
         AdminItems = Menu,
         Favorited = Config.FavoritedItems,
+        BanTypes = Config.BanTimeCategories,
     })
 end
 

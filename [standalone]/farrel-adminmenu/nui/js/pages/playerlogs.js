@@ -9,7 +9,10 @@ FARREL.AdminMenu.LoadPlayerLogs = function() {
             }
         }, 350);
     } else {
-        DebugMessage('No logs found.');
+        setTimeout(() => {
+            FARREL.AdminMenu.CheckMenuSize('Logs')
+            DebugMessage('No logs found.');
+        }, 350);
     }
 }
 

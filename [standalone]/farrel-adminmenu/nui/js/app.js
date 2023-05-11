@@ -5,6 +5,7 @@ FARREL.AdminMenu.Action = {}
 FARREL.AdminMenu.Category = {}
 FARREL.AdminMenu.Sidebar = {}
 FARREL.AdminMenu.PlayerList = {}
+FARREL.AdminMenu.BanList = {}
 FARREL.AdminMenu.SizeChange = {}
 
 FARREL.AdminMenu.DebugEnabled = null;
@@ -15,6 +16,7 @@ FARREL.AdminMenu.FavoritedItems = {};
 FARREL.AdminMenu.EnabledItems = {};
 FARREL.AdminMenu.Bans = [];
 
+FARREL.AdminMenu.BanTypes = null;
 FARREL.AdminMenu.Logs = null;
 FARREL.AdminMenu.Players = null;
 FARREL.AdminMenu.Items = null;
@@ -34,10 +36,14 @@ FARREL.AdminMenu.Update = function(Data) {
     FARREL.AdminMenu.Players = Data.AllPlayers;
     FARREL.AdminMenu.Items = Data.AdminItems;
     FARREL.AdminMenu.Bans = Data.Bans;
+    FARREL.AdminMenu.BanTypes = Data.BanTypes;
     FARREL.AdminMenu.Logs = Data.Logs;
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
         FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'RecentBans') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadBanList();
     } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
         FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerLogs();
@@ -51,6 +57,7 @@ FARREL.AdminMenu.Open = function(Data) {
     FARREL.AdminMenu.DebugEnabled = Data.Debug;
     FARREL.AdminMenu.FavoritedItems = Data.Favorited;
     FARREL.AdminMenu.Bans = Data.Bans;
+    FARREL.AdminMenu.BanTypes = Data.BanTypes;
     DebugMessage(`Menu Opening`);
     $('.menu-main-container').css('pointer-events', 'auto');
     $('.menu-main-container').fadeIn(450, function() {
@@ -64,6 +71,9 @@ FARREL.AdminMenu.Open = function(Data) {
     if (FARREL.AdminMenu.Sidebar.Selected == 'Actions') {
         FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadItems();
+    } else if (FARREL.AdminMenu.Sidebar.Selected == 'RecentBans') {
+        FARREL.AdminMenu.ResetPage('All');
+        FARREL.AdminMenu.LoadBanList();
     } else if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
         FARREL.AdminMenu.ResetPage('All');
         FARREL.AdminMenu.LoadPlayerLogs();
@@ -107,6 +117,14 @@ FARREL.AdminMenu.ChangeSize = function(ForceSize) {
         }
     }, 350);
 }
+FARREL.AdminMenu.ShowCheckmark = () => {
+    $('.menu-checkmark-wrapper').show();
+    $('.menu-checkmark-container').html('<div class="ui-styles-checkmark"><div class="circle"></div><svg fill="#fff" class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="3.2vh" height="3.2vh"><path d="M 28.28125 6.28125 L 11 23.5625 L 3.71875 16.28125 L 2.28125 17.71875 L 10.28125 25.71875 L 11 26.40625 L 11.71875 25.71875 L 29.71875 7.71875 Z"/></svg></div>');
+    setTimeout(() => {
+        $('.menu-checkmark-wrapper').fadeOut(500);
+    }, 2000);
+}
+
 FARREL.AdminMenu.CheckMenuSize = function(Type) {
     if (Type == 'Logs') {
         if (FARREL.AdminMenu.Sidebar.Selected == 'PlayerLogs') {
